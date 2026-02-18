@@ -104,7 +104,7 @@ function PaceConverterInner() {
                   setEditingText(e.target.value);
                   commitValue(e.target.value, unit);
                 }}
-                className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm tabular-nums outline-none transition-colors focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-neutral-500 dark:focus:ring-neutral-700"
+                className="h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand-500 dark:focus:ring-brand-500/20"
               />
             </div>
           );
@@ -138,10 +138,12 @@ function PaceConverterInner() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, delay: i * 0.05 }}
-              className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+              className="rounded-xl bg-neutral-50 p-3.5 dark:bg-neutral-900"
             >
-              <div className="text-xs text-neutral-500">{race}</div>
-              <div className="mt-0.5 text-lg font-semibold tabular-nums text-neutral-900 dark:text-neutral-100">
+              <div className="text-xs font-medium text-neutral-500">
+                {race}
+              </div>
+              <div className="mt-1 text-lg font-bold tabular-nums text-neutral-900 dark:text-neutral-100">
                 {raceTimes[race]}
               </div>
             </motion.div>
