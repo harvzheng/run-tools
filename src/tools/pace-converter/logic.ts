@@ -1,9 +1,9 @@
 import type { PaceUnit, RaceTimes } from "@/lib/types";
 import { formatTime, formatPace } from "@/lib/utils";
 
-const KM_PER_MILE = 1.609344;
+export const KM_PER_MILE = 1.609344;
 
-const RACE_DISTANCES_KM: Record<string, number> = {
+export const RACE_DISTANCES_KM: Record<string, number> = {
   "5K": 5,
   "10K": 10,
   "Half Marathon": 21.0975,
@@ -84,6 +84,17 @@ export function calculateRaceTimes(secPerKm: number): RaceTimes {
 }
 
 /**
+ * Calculate finish time for a custom distance.
+ * Distance in km, pace in seconds per km.
+ */
+export function calculateCustomTime(
+  distanceKm: number,
+  secPerKm: number,
+): string {
+  return formatTime(distanceKm * secPerKm);
+}
+
+/**
  * Format a speed value for display.
  * Pace units → "M:SS", speed units → decimal with 1 decimal place.
  */
@@ -92,6 +103,27 @@ export function formatValue(value: number, unit: PaceUnit): string {
     return secondsToPace(value);
   }
   return value.toFixed(1);
+}
+
+/**
+ * Parse a time string like "1:45:29" or "25:00" into total seconds.
+ */
+export function timeToSeconds(time: string): number {
+  const parts = time.trim().split(":");
+  if (parts.length === 3) {
+    return Number(parts[0]) * 3600 + Number(parts[1]) * 60 + Number(parts[2]);
+  }
+  if (parts.length === 2) {
+    return Number(parts[0]) * 60 + Number(parts[1]);
+  }
+  return Number(time);
+}
+
+/**
+ * Derive seconds-per-km from a finish time and distance in km.
+ */
+export function paceFromTime(totalSeconds: number, distanceKm: number): number {
+  return totalSeconds / distanceKm;
 }
 
 /**

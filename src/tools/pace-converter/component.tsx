@@ -7,14 +7,22 @@ import {
   formatValue,
   parseValue,
   calculateRaceTimes,
+  calculateCustomTime,
+  timeToSeconds,
+  paceFromTime,
+  KM_PER_MILE,
+  RACE_DISTANCES_KM,
 } from "./logic";
 import { config } from "./config";
 import type { PaceUnit } from "@/lib/types";
 import { motion } from "framer-motion";
-import { Copy, Check } from "lucide-react";
+
+type DistanceUnit = "km" | "mi";
 
 interface PaceState {
   paceMinKm: number;
+  customDistance: number;
+  customDistanceUnit: string;
 }
 
 const UNITS: { unit: PaceUnit; label: string }[] = [
@@ -26,6 +34,51 @@ const UNITS: { unit: PaceUnit; label: string }[] = [
 
 const RACE_NAMES = ["5K", "10K", "Half Marathon", "Marathon"] as const;
 
+const inputClass =
+  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
+
+function TimeInput({
+  value,
+  onCommit,
+  id,
+  variant = "bordered",
+}: {
+  value: string;
+  onCommit: (time: string) => void;
+  id?: string;
+  variant?: "bordered" | "inline";
+}) {
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState("");
+
+  const className =
+    variant === "inline"
+      ? "mt-1 h-auto w-full rounded-lg bg-transparent p-0 text-lg font-bold tabular-nums text-neutral-900 outline-none focus:ring-0 dark:text-neutral-100"
+      : inputClass;
+
+  return (
+    <input
+      id={id}
+      type="text"
+      inputMode="text"
+      value={editing ? text : value}
+      onFocus={() => {
+        setEditing(true);
+        setText(value);
+      }}
+      onBlur={(e) => {
+        onCommit(e.target.value);
+        setEditing(false);
+      }}
+      onChange={(e) => {
+        setText(e.target.value);
+        onCommit(e.target.value);
+      }}
+      className={className}
+    />
+  );
+}
+
 function PaceConverterInner() {
   const [state, update] = useToolState<PaceState>(
     config.slug,
@@ -33,9 +86,9 @@ function PaceConverterInner() {
   );
   const [activeField, setActiveField] = useState<PaceUnit | null>(null);
   const [editingText, setEditingText] = useState("");
-  const [copied, setCopied] = useState(false);
-
   const secPerKm = state.paceMinKm;
+  const customDistance = state.customDistance ?? 5;
+  const customDistanceUnit = (state.customDistanceUnit ?? "km") as DistanceUnit;
   const raceTimes = calculateRaceTimes(secPerKm);
 
   const commitValue = useCallback(
@@ -50,21 +103,22 @@ function PaceConverterInner() {
     [update],
   );
 
-  const handleCopy = useCallback(async () => {
-    const lines = UNITS.map((u) => {
-      const val = convertPace(secPerKm, "min/km", u.unit);
-      return `${u.label}: ${formatValue(val, u.unit)}`;
-    });
-    const raceLines = RACE_NAMES.map((r) => `${r}: ${raceTimes[r]}`);
-    const text = [...lines, "", "Race Times:", ...raceLines].join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Clipboard unavailable
-    }
-  }, [secPerKm, raceTimes]);
+  const commitTimeForDistance = useCallback(
+    (timeStr: string, distanceKm: number) => {
+      const totalSec = timeToSeconds(timeStr);
+      if (isNaN(totalSec) || totalSec <= 0 || distanceKm <= 0) return;
+      const newSecPerKm = paceFromTime(totalSec, distanceKm);
+      if (isFinite(newSecPerKm) && newSecPerKm > 0) {
+        update({ paceMinKm: newSecPerKm });
+      }
+    },
+    [update],
+  );
+
+  const customDistanceKm =
+    customDistanceUnit === "mi"
+      ? customDistance * KM_PER_MILE
+      : customDistance;
 
   return (
     <div className="flex flex-col gap-6">
@@ -104,32 +158,60 @@ function PaceConverterInner() {
                   setEditingText(e.target.value);
                   commitValue(e.target.value, unit);
                 }}
-                className="h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand-500 dark:focus:ring-brand-500/20"
+                className={inputClass}
               />
             </div>
           );
         })}
       </div>
 
+      {/* Custom distance */}
+      <div className="flex flex-col gap-2">
+        <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+          Custom Distance
+        </h2>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-1 items-center gap-2">
+            <input
+              type="number"
+              id="custom-distance"
+              value={customDistance}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                if (v > 0) update({ customDistance: v });
+              }}
+              min={0.1}
+              step={0.1}
+              className={inputClass}
+            />
+            <select
+              value={customDistanceUnit}
+              onChange={(e) =>
+                update({
+                  customDistanceUnit: e.target.value as DistanceUnit,
+                })
+              }
+              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <option value="km">km</option>
+              <option value="mi">mi</option>
+            </select>
+          </div>
+          <div className="w-32">
+            <TimeInput
+              id="custom-time"
+              value={calculateCustomTime(customDistanceKm, secPerKm)}
+              onCommit={(t) => commitTimeForDistance(t, customDistanceKm)}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Race times */}
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-            Race Finish Times
-          </h2>
-          <button
-            onClick={handleCopy}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-300"
-            aria-label="Copy results as text"
-          >
-            {copied ? (
-              <Check className="h-3.5 w-3.5" />
-            ) : (
-              <Copy className="h-3.5 w-3.5" />
-            )}
-            {copied ? "Copied!" : "Copy"}
-          </button>
-        </div>
+        <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+          Race Finish Times
+        </h2>
 
         <div className="grid grid-cols-2 gap-2">
           {RACE_NAMES.map((race, i) => (
@@ -140,12 +222,20 @@ function PaceConverterInner() {
               transition={{ duration: 0.2, delay: i * 0.05 }}
               className="rounded-xl bg-neutral-50 p-3.5 dark:bg-neutral-900"
             >
-              <div className="text-xs font-medium text-neutral-500">
+              <label
+                htmlFor={`race-${race}`}
+                className="text-xs font-medium text-neutral-500"
+              >
                 {race}
-              </div>
-              <div className="mt-1 text-lg font-bold tabular-nums text-neutral-900 dark:text-neutral-100">
-                {raceTimes[race]}
-              </div>
+              </label>
+              <TimeInput
+                id={`race-${race}`}
+                variant="inline"
+                value={raceTimes[race]}
+                onCommit={(t) =>
+                  commitTimeForDistance(t, RACE_DISTANCES_KM[race])
+                }
+              />
             </motion.div>
           ))}
         </div>
