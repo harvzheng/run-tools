@@ -52,11 +52,14 @@ RunTools is a web application offering a collection of utility tools for runners
 **Inputs:**
 - Pace value (e.g. 8:30)
 - Unit: min/mi, min/km, mph, km/h
+- Custom distance (number + km/mi selector)
 
 **Outputs:**
 - Converted values in all four formats simultaneously
 - Common race finish times at that pace (5K, 10K, Half Marathon, Marathon)
-- Bi-directional: changing any field updates all others in real time
+- Custom distance finish time
+- Bi-directional: changing any pace/speed field updates all others in real time
+- Reverse conversion: editing any race time or custom distance time derives the corresponding pace and updates all fields
 
 ---
 

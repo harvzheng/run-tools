@@ -14,6 +14,10 @@ run-tools/
 │   ├── app/                        # Next.js App Router
 │   │   ├── layout.tsx              # Root layout (nav, theme, providers)
 │   │   ├── page.tsx                # Home — tool catalog/grid
+│   │   ├── about/
+│   │   │   └── page.tsx            # About page
+│   │   ├── changelog/
+│   │   │   └── page.tsx            # Changelog page (timeline UI)
 │   │   └── tools/
 │   │       └── [slug]/
 │   │           └── page.tsx        # Dynamic route — renders tool by slug
@@ -32,11 +36,14 @@ run-tools/
 │   │       └── logic.test.ts
 │   │
 │   ├── components/                 # Shared UI components
-│   │   ├── ui/                     # Magic UI components (installed via CLI)
-│   │   ├── tool-shell.tsx          # Shared wrapper: header, share button, layout
+│   │   ├── nav.tsx                 # Site-wide navigation bar
+│   │   ├── tool-shell.tsx          # Shared wrapper: header, back link, layout
+│   │   ├── tool-card.tsx           # Tool catalog card with icon badge
 │   │   ├── number-input.tsx        # Styled numeric input with unit labels
-│   │   ├── result-card.tsx         # Animated result display card
 │   │   └── zone-bar.tsx            # Reusable colored bar visualization
+│   │
+│   ├── data/
+│   │   └── changelog.ts            # Structured changelog entries
 │   │
 │   ├── hooks/
 │   │   ├── use-local-storage.ts    # Generic localStorage hook with SSR safety
@@ -46,17 +53,16 @@ run-tools/
 │   │   ├── types.ts                # Shared types (ToolConfig, Zone, Pace, etc.)
 │   │   └── utils.ts                # Shared utilities (formatPace, formatTime, etc.)
 │   │
-│   └── styles/
-│       └── globals.css             # Tailwind base + custom CSS variables
+│   └── app/
+│       └── globals.css             # Tailwind base + brand theme CSS variables
 │
 ├── e2e/                            # Playwright end-to-end tests
-├── capacitor/                      # Capacitor config + native project shells
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml                  # PR checks: lint, type-check, test, build
 │       └── deploy.yml              # Main branch: build + deploy
+├── capacitor.config.ts             # Capacitor config (webDir: "out")
 ├── next.config.ts
-├── tailwind.config.ts
 ├── tsconfig.json
 ├── vitest.config.ts
 └── package.json
@@ -175,8 +181,7 @@ This separation means:
 ### `<ToolShell>`
 Wraps every tool with consistent chrome:
 - Tool name + description header
-- Share/copy button (encodes current inputs as URL query params)
-- Back to catalog link
+- "Back to tools" link with arrow icon
 - Animated entrance via Framer Motion
 
 ### `useToolState(slug, defaultInputs)`

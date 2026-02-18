@@ -67,5 +67,11 @@
 - [x] About page (/about)
 - [x] Changelog page (/changelog) with timeline UI
 - [x] Changelog data file (src/data/changelog.ts)
-- [x] Pre-commit hook enforcing changelog updates (.githooks/pre-commit)
 - [x] Verify: build, test, type-check all pass
+
+## Post-MVP: UX Enhancements ✅
+- [x] Back-to-tools link on tool pages (ArrowLeft + "Back to tools")
+- [x] Custom distance field in Pace Converter (number input + km/mi select + time)
+- [x] Bidirectional time↔pace conversion — edit any race time or custom time to derive pace
+- [x] TimeInput component with bordered/inline variants
+- [x] Verify: build passes, 19 tests passing
