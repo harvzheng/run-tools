@@ -34,7 +34,9 @@ Next.js 15 App Router with Tailwind CSS v4, Framer Motion, and Capacitor for mob
 
 **State persistence:** `useToolState(slug, defaultInputs)` initializes from URL params → localStorage (`run-tools:<slug>`) → defaults. All tool components must be wrapped in `<Suspense>` because `useToolState` calls `useSearchParams`.
 
-**Shared UI:** `<ToolShell>` wraps every tool with header, back link, and share button. `<ZoneBar>` and `<NumberInput>` are reusable input/output components.
+**Shared UI:** `<ToolShell>` wraps every tool with header and back-to-tools link. `<ZoneBar>` and `<NumberInput>` are reusable input/output components. `<Nav>` provides the site-wide navigation bar.
+
+**Pages:** Home (`/`), About (`/about`), Changelog (`/changelog`), and tool pages (`/tools/[slug]`). Changelog entries live in `src/data/changelog.ts`.
 
 ## Key Conventions
 
