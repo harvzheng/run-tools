@@ -60,3 +60,12 @@
 - [x] E2e tests (Playwright) — 5 test cases
 - [x] Final CLAUDE.md update
 - [x] Verify: build, test (19 passing), type-check, lint all pass
+
+## Post-MVP: Branding & Pages ✅
+- [x] RunTools branding — gradient hero, styled nav bar, accent colors
+- [x] Restyled tool cards, inputs, zone bars, race time cards
+- [x] About page (/about)
+- [x] Changelog page (/changelog) with timeline UI
+- [x] Changelog data file (src/data/changelog.ts)
+- [x] Pre-commit hook enforcing changelog updates (.githooks/pre-commit)
+- [x] Verify: build, test, type-check all pass

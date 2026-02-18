@@ -58,12 +58,12 @@ function HRZonesInner() {
   return (
     <div className="flex flex-col gap-6">
       {/* Method selector */}
-      <div className="flex gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800">
+      <div className="flex gap-1 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800/50">
         {METHOD_OPTIONS.map((opt) => (
           <button
             key={opt.value}
             onClick={() => update({ method: opt.value })}
-            className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
               method === opt.value
                 ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-neutral-100"
                 : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
