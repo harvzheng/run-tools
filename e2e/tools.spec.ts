@@ -59,7 +59,7 @@ test.describe("Pace Converter", () => {
 
     // Race times should be visible
     await expect(page.getByText("5K")).toBeVisible();
-    await expect(page.getByText("Marathon")).toBeVisible();
+    await expect(page.getByText("Marathon", { exact: true })).toBeVisible();
   });
 });
 
