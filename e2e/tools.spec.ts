@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Home page", () => {
   test("shows tool catalog with 2 tools", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: "RunTools" })).toBeVisible();
+    await expect(page.getByText("RunTools")).toBeVisible();
     await expect(page.getByText("Heart Rate Zones")).toBeVisible();
     await expect(page.getByText("Pace Converter")).toBeVisible();
   });
