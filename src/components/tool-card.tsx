@@ -8,6 +8,7 @@ import {
   Activity,
   Gauge,
   Footprints,
+  CloudSun,
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const iconMap: Record<string, LucideIcon> = {
   Activity,
   Gauge,
   Footprints,
+  CloudSun,
 };
 
 const accentMap: Record<string, string> = {
@@ -27,6 +29,7 @@ const accentMap: Record<string, string> = {
   Activity: "from-emerald-500 to-emerald-600",
   Gauge: "from-amber-500 to-amber-600",
   Footprints: "from-violet-500 to-violet-600",
+  CloudSun: "from-sky-500 to-sky-600",
 };
 
 export function ToolCard({ tool, index }: { tool: ToolConfig; index: number }) {

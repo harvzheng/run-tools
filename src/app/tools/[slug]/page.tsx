@@ -6,6 +6,7 @@ import { ToolShell } from "@/components/tool-shell";
 const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
   "hr-zones": dynamic(() => import("@/tools/hr-zones/component")),
   "pace-converter": dynamic(() => import("@/tools/pace-converter/component")),
+  "weather-gear": dynamic(() => import("@/tools/weather-gear/component")),
 };
 
 export function generateStaticParams() {
