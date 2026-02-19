@@ -14,7 +14,7 @@ describe("timeToSeconds", () => {
 describe("predictTime", () => {
   it("predicts 10K from 5K using Riegel", () => {
     const predicted = predictTime(1500, 5, 10, 1.06);
-    expect(predicted).toBeCloseTo(3129, 0);
+    expect(predicted).toBeCloseTo(3127.4, 1);
   });
 
   it("returns base time for same distance", () => {
