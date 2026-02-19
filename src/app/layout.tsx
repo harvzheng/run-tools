@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://runtools.app",
   },
+  twitter: {
+    card: "summary",
+    title: "RunTools — Utility Tools for Runners",
+    description:
+      "Free running calculators: heart rate zones, pace converter, and more. No sign-up required.",
+  },
 };
 
 export const viewport: Viewport = {
