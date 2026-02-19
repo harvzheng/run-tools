@@ -1,11 +1,17 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Home page", () => {
-  test("shows tool catalog with 2 tools", async ({ page }) => {
+  test("shows tool catalog", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("RunTools")).toBeVisible();
-    await expect(page.getByText("Heart Rate Zones")).toBeVisible();
-    await expect(page.getByText("Pace Converter")).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "RunTools", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Heart Rate Zones" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Pace Converter", exact: true }),
+    ).toBeVisible();
   });
 
   test("navigates to HR zones tool", async ({ page }) => {

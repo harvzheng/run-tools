@@ -1,0 +1,141 @@
+"use client";
+
+import { Suspense } from "react";
+import { useToolState } from "@/hooks/use-tool-state";
+import { NumberInput } from "@/components/number-input";
+import { motion } from "framer-motion";
+import { config } from "./config";
+import { equivalentFlatSpeed, formatPaceValue, type SpeedUnit } from "./logic";
+
+interface TreadmillState {
+  speed: number;
+  speedUnit: string;
+  incline: number;
+}
+
+const inputClass =
+  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
+
+function TreadmillPaceInner() {
+  const [state, update] = useToolState<TreadmillState>(
+    config.slug,
+    config.defaultInputs as TreadmillState,
+  );
+
+  const speedUnit = (state.speedUnit ?? "km/h") as SpeedUnit;
+  const result = equivalentFlatSpeed(state.speed, speedUnit, state.incline);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="treadmill-speed"
+            className="text-sm font-medium text-neutral-700 dark:text-neutral-300"
+          >
+            Treadmill Speed
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              id="treadmill-speed"
+              type="number"
+              min={3}
+              step={0.1}
+              value={state.speed}
+              onChange={(e) => update({ speed: Number(e.target.value) })}
+              className={inputClass}
+            />
+            <select
+              value={speedUnit}
+              onChange={(e) =>
+                update({ speedUnit: e.target.value as SpeedUnit })
+              }
+              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+            >
+              <option value="km/h">km/h</option>
+              <option value="mph">mph</option>
+            </select>
+          </div>
+        </div>
+
+        <NumberInput
+          label="Incline"
+          value={state.incline}
+          onChange={(incline) => update({ incline })}
+          min={-3}
+          max={15}
+          step={0.5}
+          unit="%"
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+          Equivalent Outdoor Pace
+        </h2>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {[
+            {
+              label: "min/km",
+              value: formatPaceValue(result.paceSecondsPerKm),
+            },
+            {
+              label: "min/mi",
+              value: formatPaceValue(result.paceSecondsPerMi),
+            },
+          ].map((item, i) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: i * 0.05 }}
+              className="rounded-xl bg-neutral-50 p-3.5 dark:bg-neutral-900"
+            >
+              <div className="text-xs font-medium text-neutral-500">
+                {item.label}
+              </div>
+              <div className="mt-1 text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                {item.value}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+          Equivalent Flat Speed
+        </h2>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {[
+            { label: "km/h", value: result.flatSpeedKmh.toFixed(1) },
+            { label: "mph", value: result.flatSpeedMph.toFixed(1) },
+          ].map((item, i) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: i * 0.05 }}
+              className="rounded-xl bg-neutral-50 p-3.5 dark:bg-neutral-900"
+            >
+              <div className="text-xs font-medium text-neutral-500">
+                {item.label}
+              </div>
+              <div className="mt-1 text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                {item.value}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function TreadmillPace() {
+  return (
+    <Suspense>
+      <TreadmillPaceInner />
+    </Suspense>
+  );
+}
