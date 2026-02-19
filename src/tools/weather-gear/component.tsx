@@ -165,48 +165,34 @@ function WeatherGearInner() {
     <div className="flex flex-col gap-6">
       {/* Location section */}
       <div className="flex flex-col gap-3">
-        <div className="flex gap-2">
-          <button
-            onClick={detectLocation}
-            disabled={loading}
-            className="flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <MapPin className="h-4 w-4" />
-            )}
-            Use my location
-          </button>
-          <button
-            onClick={() => update({ useManualTemp: !state.useManualTemp })}
-            className={`rounded-xl border px-4 py-2.5 text-sm font-medium transition-colors ${
-              state.useManualTemp
-                ? "border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-700 dark:bg-brand-900/20 dark:text-brand-300"
-                : "border-neutral-200 text-secondary hover:border-neutral-300 dark:border-neutral-700 dark:hover:border-neutral-600"
-            }`}
-          >
-            <Thermometer className="mr-1.5 inline h-4 w-4" />
-            Manual
-          </button>
-        </div>
-
         {!state.useManualTemp && (
           <div ref={searchRef} className="relative">
-            <div className="relative">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (geocodingResults.length > 0) {
+                  selectLocation(geocodingResults[0]);
+                  setSearchQuery("");
+                  setShowDropdown(false);
+                }
+              }}
+              className="relative"
+            >
               <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-tertiary" />
               <input
                 type="text"
                 placeholder="Search city..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => geocodingResults.length > 0 && setShowDropdown(true)}
+                onFocus={() =>
+                  geocodingResults.length > 0 && setShowDropdown(true)
+                }
                 className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3.5 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
               />
               {geocodingLoading && (
                 <Loader2 className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin text-tertiary" />
               )}
-            </div>
+            </form>
 
             {showDropdown && geocodingResults.length > 0 && (
               <div className="absolute z-10 mt-1 w-full rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-700 dark:bg-neutral-900">
@@ -250,6 +236,34 @@ function WeatherGearInner() {
             unit={`°${tempUnit}`}
           />
         )}
+
+        <div className="flex gap-2">
+          {!state.useManualTemp && (
+            <button
+              onClick={detectLocation}
+              disabled={loading}
+              className="flex items-center gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm font-medium text-secondary transition-colors hover:border-neutral-300 hover:text-neutral-700 disabled:opacity-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <MapPin className="h-4 w-4" />
+              )}
+              Use my location
+            </button>
+          )}
+          <button
+            onClick={() => update({ useManualTemp: !state.useManualTemp })}
+            className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-medium transition-colors ${
+              state.useManualTemp
+                ? "border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-700 dark:bg-brand-900/20 dark:text-brand-300"
+                : "border-neutral-200 text-secondary hover:border-neutral-300 hover:text-neutral-700 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+            }`}
+          >
+            <Thermometer className="h-4 w-4" />
+            {state.useManualTemp ? "Search location" : "Enter temp manually"}
+          </button>
+        </div>
 
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-300">
