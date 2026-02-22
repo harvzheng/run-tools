@@ -2,7 +2,7 @@ import type { ToolConfig } from "@/lib/types";
 
 export const config: ToolConfig = {
   slug: "race-time-predictor",
-  name: "Race Time Predictor",
+  name: "Race time predictor",
   description: "Project race results from a recent performance",
   icon: "Activity",
   tags: ["race", "prediction", "training"],

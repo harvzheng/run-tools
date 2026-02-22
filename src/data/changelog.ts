@@ -9,7 +9,7 @@ export const changelog: ChangelogEntry[] = [
   {
     date: "2026-02-18",
     version: "0.0.3",
-    title: "Pace Converter enhancements",
+    title: "Pace converter enhancements",
     changes: [
       "Added custom distance field with km/mi selector",
       "Bidirectional time-to-pace conversion — edit any race or custom time to derive pace",

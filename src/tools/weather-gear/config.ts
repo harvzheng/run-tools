@@ -2,7 +2,7 @@ import type { ToolConfig } from "@/lib/types";
 
 export const config: ToolConfig = {
   slug: "weather-gear",
-  name: "Weather Gear",
+  name: "Weather gear",
   description: "What to wear for your run based on current weather",
   icon: "CloudSun",
   tags: ["weather", "clothing", "gear"],

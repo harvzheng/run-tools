@@ -203,7 +203,7 @@ function SplitCalculatorInner() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-            Split Plan
+            Split plan
           </h2>
           <div className="text-sm text-neutral-500">
             Avg pace:{" "}
@@ -218,7 +218,7 @@ function SplitCalculatorInner() {
           <div className="grid grid-cols-5 gap-2 bg-neutral-50 px-3 py-2 text-xs font-semibold tracking-wide text-neutral-500 uppercase dark:bg-neutral-900">
             <div>Split</div>
             <div>Distance</div>
-            <div>Split Time</div>
+            <div>Split time</div>
             <div>Cumulative</div>
             <div>Pace</div>
           </div>
