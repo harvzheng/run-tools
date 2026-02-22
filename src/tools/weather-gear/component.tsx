@@ -274,7 +274,7 @@ function WeatherGearInner() {
 
       {/* Intensity selector */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-label">Workout Intensity</label>
+        <label className="text-label">Workout intensity</label>
         <div className="flex gap-1 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800/50">
           {INTENSITY_OPTIONS.map((opt) => (
             <button
@@ -313,7 +313,7 @@ function WeatherGearInner() {
           </div>
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-label">Wind Speed</label>
+          <label className="text-label">Wind speed</label>
           <div className="flex gap-1 rounded-lg bg-neutral-100 p-0.5 dark:bg-neutral-800/50">
             {(["mph", "kmh"] as const).map((u) => (
               <button
@@ -392,7 +392,7 @@ function WeatherGearInner() {
       {recommendation && (
         <div className="flex flex-col gap-3">
           <div>
-            <h2 className="text-section">Clothing Recommendation</h2>
+            <h2 className="text-section">Clothing recommendation</h2>
             <p className="mt-0.5 text-sm text-secondary">
               {recommendation.summary} — dressing for{" "}
               {formatTemperature(recommendation.effectiveTemperatureF, tempUnit)}
