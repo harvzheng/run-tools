@@ -44,7 +44,7 @@ export function ToolCard({ tool, index }: { tool: ToolConfig; index: number }) {
     >
       <Link
         href={`/tools/${tool.slug}`}
-        className="group relative flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5 transition-all hover:border-neutral-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
+        className="group relative flex h-full flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5 transition-all hover:border-neutral-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
       >
         <div
           className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} text-white shadow-sm`}
