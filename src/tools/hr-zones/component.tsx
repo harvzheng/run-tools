@@ -126,7 +126,7 @@ function HRZonesInner() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-            Training Zones
+            Training zones
           </h2>
           <button
             onClick={handleCopy}

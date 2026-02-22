@@ -168,7 +168,7 @@ function PaceConverterInner() {
       {/* Custom distance */}
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Custom Distance
+          Custom distance
         </h2>
         <div className="flex items-center gap-3">
           <div className="flex flex-1 items-center gap-2">
@@ -210,7 +210,7 @@ function PaceConverterInner() {
       {/* Race times */}
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Race Finish Times
+          Race finish times
         </h2>
 
         <div className="grid grid-cols-2 gap-2">
