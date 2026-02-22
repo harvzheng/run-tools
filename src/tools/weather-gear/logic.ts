@@ -219,8 +219,8 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 20,
     maxF: 25,
-    torso: ["Two long-sleeve layers", "Wind/water-resistant jacket"],
-    legs: ["Two tights layers"],
+    torso: ["Thermal base layer", "Fleece mid-layer", "Wind/water-resistant jacket"],
+    legs: ["Fleece-lined tights"],
     head: ["Thick winter hat"],
     hands: ["Double gloves or heavy mittens"],
     feet: ["Thick wool socks"],
@@ -229,7 +229,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 25,
     maxF: 30,
-    torso: ["Fleece-lined long sleeve", "Windproof jacket"],
+    torso: ["Wicking base layer", "Fleece mid-layer", "Windproof jacket"],
     legs: ["Fleece-lined tights"],
     head: ["Winter hat"],
     hands: ["Mittens or thick gloves"],
@@ -239,7 +239,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 30,
     maxF: 35,
-    torso: ["Thin long-sleeve base", "Thicker long-sleeve outer"],
+    torso: ["Wicking base layer", "Long-sleeve outer", "Light windbreaker"],
     legs: ["Thicker tights"],
     head: ["Fleece headband or light hat"],
     hands: ["Thick gloves"],
@@ -249,7 +249,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 35,
     maxF: 40,
-    torso: ["Thick long sleeve or double wicking layers"],
+    torso: ["Wicking base layer", "Light windbreaker or long sleeve"],
     legs: ["Full tights"],
     head: ["Light headband"],
     hands: ["Thin gloves"],
@@ -259,7 +259,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 40,
     maxF: 45,
-    torso: ["Medium long sleeve + vest", "Or double light layers"],
+    torso: ["Wicking tee", "Light jacket or vest"],
     legs: ["Capris or half-tights"],
     head: ["Light headband"],
     hands: ["Thin gloves"],
@@ -269,7 +269,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 45,
     maxF: 50,
-    torso: ["Thicker long sleeve", "Or tee + thin long sleeve"],
+    torso: ["Long sleeve"],
     legs: ["Longer shorts or capris"],
     head: ["Light hat optional"],
     hands: [],
@@ -279,7 +279,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 50,
     maxF: 60,
-    torso: ["Thin long sleeve or light wicking layer"],
+    torso: ["Light long sleeve"],
     legs: ["Shorts"],
     head: ["Optional headband"],
     hands: [],
@@ -386,10 +386,10 @@ export function getClothingRecommendation(
   const alerts = buildAlerts(weather, effectiveF);
 
   const zoneKeys: ClothingZone["zone"][] = [
-    "torso",
-    "legs",
     "head",
+    "torso",
     "hands",
+    "legs",
     "feet",
     "accessories",
   ];
