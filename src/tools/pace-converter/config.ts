@@ -2,7 +2,7 @@ import type { ToolConfig } from "@/lib/types";
 
 export const config: ToolConfig = {
   slug: "pace-converter",
-  name: "Pace Converter",
+  name: "Pace converter",
   description: "Convert between pace and speed formats",
   icon: "Timer",
   tags: ["pace", "speed", "conversion"],

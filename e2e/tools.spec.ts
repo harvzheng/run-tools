@@ -10,7 +10,7 @@ test.describe("Home page", () => {
       page.getByRole("heading", { name: "Heart Rate Zones" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Pace Converter", exact: true }),
+      page.getByRole("heading", { name: "Pace converter", exact: true }),
     ).toBeVisible();
   });
 

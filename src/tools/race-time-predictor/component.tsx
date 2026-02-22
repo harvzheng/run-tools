@@ -209,7 +209,7 @@ function RaceTimePredictorInner() {
 
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Predicted Finish Times
+          Predicted finish times
         </h2>
         <div className="grid gap-2 sm:grid-cols-2">
           {standardPredictions.map((race, i) => (

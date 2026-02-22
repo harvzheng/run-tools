@@ -71,7 +71,7 @@ function TreadmillPaceInner() {
 
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Equivalent Outdoor Pace
+          Equivalent outdoor pace
         </h2>
         <div className="grid gap-2 sm:grid-cols-2">
           {[
@@ -104,7 +104,7 @@ function TreadmillPaceInner() {
 
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Equivalent Flat Speed
+          Equivalent flat speed
         </h2>
         <div className="grid gap-2 sm:grid-cols-2">
           {[

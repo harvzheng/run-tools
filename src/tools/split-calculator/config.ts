@@ -2,7 +2,7 @@ import type { ToolConfig } from "@/lib/types";
 
 export const config: ToolConfig = {
   slug: "split-calculator",
-  name: "Split Calculator",
+  name: "Split calculator",
   description: "Plan even, negative, or positive race splits",
   icon: "Footprints",
   tags: ["splits", "pace", "race"],

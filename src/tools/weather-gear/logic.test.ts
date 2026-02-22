@@ -205,7 +205,7 @@ describe("getClothingRecommendation", () => {
     expect(rec.effectiveTemperatureF).toBe(70);
     expect(rec.summary).toContain("light");
     const torso = rec.zones.find((z) => z.zone === "torso");
-    expect(torso?.items.some((i) => i.toLowerCase().includes("tank") || i.toLowerCase().includes("singlet"))).toBe(true);
+    expect(torso?.items.some((i) => i.toLowerCase().includes("short sleeve"))).toBe(true);
   });
 
   it("recommends heavy layers for cold weather", () => {
@@ -213,7 +213,7 @@ describe("getClothingRecommendation", () => {
     const rec = getClothingRecommendation(weather, "easy");
     expect(rec.effectiveTemperatureF).toBe(10);
     const torso = rec.zones.find((z) => z.zone === "torso");
-    expect(torso?.items.some((i) => i.toLowerCase().includes("thermal") || i.toLowerCase().includes("fleece"))).toBe(true);
+    expect(torso?.items.some((i) => i.toLowerCase().includes("3 layers"))).toBe(true);
     // Should have cold alert
     expect(rec.alerts.some((a) => a.type === "cold")).toBe(true);
   });
