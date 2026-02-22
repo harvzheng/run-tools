@@ -259,7 +259,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 40,
     maxF: 45,
-    torso: ["1 layer + vest"],
+    torso: ["Long sleeve + vest"],
     legs: ["Capris or half-tights"],
     head: ["Light headband"],
     hands: ["Thin gloves"],
@@ -269,7 +269,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 45,
     maxF: 50,
-    torso: ["1 layer"],
+    torso: ["Long sleeve"],
     legs: ["Longer shorts or capris"],
     head: ["Light hat optional"],
     hands: [],
@@ -279,7 +279,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 50,
     maxF: 60,
-    torso: ["1 layer"],
+    torso: ["Long sleeve"],
     legs: ["Shorts"],
     head: ["Optional headband"],
     hands: [],
@@ -289,7 +289,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 60,
     maxF: Infinity,
-    torso: ["1 layer"],
+    torso: ["Short sleeve"],
     legs: ["Shorts"],
     head: ["Sun hat or visor"],
     hands: [],

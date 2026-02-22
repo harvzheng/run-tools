@@ -205,7 +205,7 @@ describe("getClothingRecommendation", () => {
     expect(rec.effectiveTemperatureF).toBe(70);
     expect(rec.summary).toContain("light");
     const torso = rec.zones.find((z) => z.zone === "torso");
-    expect(torso?.items.some((i) => i.toLowerCase().includes("1 layer"))).toBe(true);
+    expect(torso?.items.some((i) => i.toLowerCase().includes("short sleeve"))).toBe(true);
   });
 
   it("recommends heavy layers for cold weather", () => {
