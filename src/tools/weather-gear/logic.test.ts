@@ -213,9 +213,37 @@ describe("getClothingRecommendation", () => {
     const rec = getClothingRecommendation(weather, "easy");
     expect(rec.effectiveTemperatureF).toBe(10);
     const torso = rec.zones.find((z) => z.zone === "torso");
-    expect(torso?.items.some((i) => i.toLowerCase().includes("3 layers"))).toBe(true);
+    // Should have at least 3 specific layer items
+    expect(torso?.items.length).toBeGreaterThanOrEqual(3);
+    expect(torso?.items.some((i) => i.toLowerCase().includes("base layer"))).toBe(true);
     // Should have cold alert
     expect(rec.alerts.some((a) => a.type === "cold")).toBe(true);
+  });
+
+  it("generates snow alert for snowy weather", () => {
+    const weather = makeWeather({
+      apparentTemperatureF: 25,
+      windSpeedMph: 10,
+      weatherCode: 73, // Moderate snow
+      precipitationMm: 2,
+    });
+    const rec = getClothingRecommendation(weather, "easy");
+    expect(rec.alerts.some((a) => a.type === "snow")).toBe(true);
+    // Should NOT generate a rain alert when snowing
+    expect(rec.alerts.some((a) => a.type === "rain")).toBe(false);
+  });
+
+  it("generates blizzard alert for heavy snow with high winds", () => {
+    const weather = makeWeather({
+      apparentTemperatureF: 15,
+      windSpeedMph: 40,
+      weatherCode: 75, // Heavy snow
+      precipitationMm: 5,
+    });
+    const rec = getClothingRecommendation(weather, "easy");
+    const snowAlert = rec.alerts.find((a) => a.type === "snow");
+    expect(snowAlert).toBeDefined();
+    expect(snowAlert?.message.toLowerCase()).toContain("blizzard");
   });
 
   it("generates wind alert for high winds", () => {

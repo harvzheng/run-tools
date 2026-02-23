@@ -23,7 +23,7 @@ export interface ClothingZone {
 }
 
 export interface WeatherAlert {
-  type: "wind" | "rain" | "cold" | "heat" | "humidity";
+  type: "wind" | "rain" | "snow" | "cold" | "heat" | "humidity";
   message: string;
 }
 
@@ -209,17 +209,17 @@ const BRACKETS: BracketDef[] = [
   {
     minF: -Infinity,
     maxF: 20,
-    torso: ["3 layers"],
+    torso: ["Moisture-wicking long sleeve base layer", "Heavyweight fleece mid-layer", "Windproof running jacket"],
     legs: ["Insulated tights", "Wind-resistant over-tights"],
     head: ["Balaclava or thick winter hat"],
     hands: ["Heavy mittens or lobster gloves"],
-    feet: ["Thick wool socks", "Waterproof shoes"],
+    feet: ["Thick wool socks", "Waterproof trail shoes or overshoes (if available)"],
     accessories: ["Neck gaiter", "Hand warmers"],
   },
   {
     minF: 20,
     maxF: 25,
-    torso: ["3 layers"],
+    torso: ["Moisture-wicking long sleeve base layer", "Fleece mid-layer", "Windproof jacket"],
     legs: ["Fleece-lined tights"],
     head: ["Thick winter hat"],
     hands: ["Double gloves or heavy mittens"],
@@ -229,7 +229,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 25,
     maxF: 30,
-    torso: ["3 layers"],
+    torso: ["Moisture-wicking long sleeve base layer", "Thermal long sleeve", "Light jacket"],
     legs: ["Fleece-lined tights"],
     head: ["Winter hat"],
     hands: ["Mittens or thick gloves"],
@@ -239,7 +239,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 30,
     maxF: 35,
-    torso: ["2 layers + vest"],
+    torso: ["Moisture-wicking long sleeve base layer", "Running vest"],
     legs: ["Thicker tights"],
     head: ["Fleece headband or light hat"],
     hands: ["Thick gloves"],
@@ -249,7 +249,7 @@ const BRACKETS: BracketDef[] = [
   {
     minF: 35,
     maxF: 40,
-    torso: ["2 layers"],
+    torso: ["Moisture-wicking long sleeve", "Light running jacket"],
     legs: ["Full tights"],
     head: ["Light headband"],
     hands: ["Thin gloves"],
@@ -318,10 +318,21 @@ function buildAlerts(
     });
   }
 
-  if (isRainy(weather.weatherCode) || weather.rainMm > 0) {
+  const snowy = isSnowy(weather.weatherCode);
+  if (snowy && weather.windSpeedMph >= 35) {
+    alerts.push({
+      type: "snow",
+      message: "Blizzard conditions — strongly consider running indoors or postponing your run",
+    });
+  } else if (snowy) {
+    alerts.push({
+      type: "snow",
+      message: "Snow expected — wear a water-resistant outer layer and watch for icy patches",
+    });
+  } else if (isRainy(weather.weatherCode) || weather.rainMm > 0) {
     alerts.push({
       type: "rain",
-      message: "Rain expected — wear water-resistant outer layer and a brimmed hat",
+      message: "Rain expected — wear a water-resistant outer layer and a brimmed hat",
     });
   }
 
