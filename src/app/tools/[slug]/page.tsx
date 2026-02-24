@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { getToolBySlug, tools } from "@/tools/registry";
 import { notFound } from "next/navigation";
 import { ToolShell } from "@/components/tool-shell";
+import { RecordVisit } from "@/components/record-visit";
 
 const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
   "hr-zones": dynamic(() => import("@/tools/hr-zones/component")),
@@ -85,6 +86,7 @@ export default async function ToolPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <RecordVisit slug={tool.slug} />
       <ToolShell tool={tool}>
         <Component />
       </ToolShell>
