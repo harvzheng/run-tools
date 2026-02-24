@@ -1,5 +1,6 @@
 import { tools } from "@/tools/registry";
 import { ToolCard } from "@/components/tool-card";
+import { RecentTools } from "@/components/recent-tools";
 
 export default function Home() {
   return (
@@ -13,14 +14,21 @@ export default function Home() {
         </p>
       </div>
 
+      <RecentTools />
+
       {tools.length === 0 ? (
         <p className="text-neutral-400">No tools available yet.</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {tools.map((tool, i) => (
-            <ToolCard key={tool.slug} tool={tool} index={i} />
-          ))}
-        </div>
+        <section>
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+            All tools
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {tools.map((tool, i) => (
+              <ToolCard key={tool.slug} tool={tool} index={i} />
+            ))}
+          </div>
+        </section>
       )}
     </main>
   );
