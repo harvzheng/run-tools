@@ -38,6 +38,10 @@ Next.js 15 App Router with Tailwind CSS v4, Framer Motion, and Capacitor for mob
 
 **Pages:** Home (`/`), About (`/about`), Changelog (`/changelog`), and tool pages (`/tools/[slug]`). Changelog entries live in `src/data/changelog.ts`.
 
+## Changelog
+
+Entries live in `src/data/changelog.ts`. **Update the changelog as part of every PR** — add a new entry at the top of the array with an incremented version and today's date. Summarize user-facing changes only (new tools, UI changes, bug fixes); omit internal refactors, CI changes, and dependency bumps unless they affect behavior.
+
 ## Key Conventions
 
 - All computation is client-side; no server APIs or data fetching.
