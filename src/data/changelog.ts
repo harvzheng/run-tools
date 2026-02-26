@@ -8,6 +8,14 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     date: "2026-02-26",
+    version: "0.0.9",
+    title: "VO2max estimator",
+    changes: [
+      "Added VO2max estimator — estimate aerobic fitness from any training run using pace and heart rate (Daniels-Gilbert formula with Karvonen HR scaling)",
+    ],
+  },
+  {
+    date: "2026-02-26",
     version: "0.0.8",
     title: "Home page deduplication",
     changes: [

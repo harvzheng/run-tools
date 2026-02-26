@@ -16,6 +16,9 @@ const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
     () => import("@/tools/split-calculator/component"),
   ),
   "treadmill-pace": dynamic(() => import("@/tools/treadmill-pace/component")),
+  "vo2max-estimator": dynamic(
+    () => import("@/tools/vo2max-estimator/component"),
+  ),
 };
 
 export function generateStaticParams() {
