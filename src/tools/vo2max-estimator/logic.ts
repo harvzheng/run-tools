@@ -1,9 +1,12 @@
 export type PaceUnit = "min/km" | "min/mi";
+export type DistanceUnit = "km" | "mi";
 
 export interface VO2maxInput {
   paceMinutes: number;
   paceSeconds: number;
   paceUnit: PaceUnit;
+  /** Optional speed override (m/min) — used when input is time + distance instead of pace */
+  speedMPerMin?: number;
   avgHR: number;
   maxHR: number;
   restHR: number;
@@ -29,6 +32,19 @@ export function paceToMetersPerMin(
   const distanceMeters = unit === "min/km" ? 1000 : MI_TO_KM * 1000;
   // convert distance/seconds → distance/minute
   return (distanceMeters / totalSeconds) * 60;
+}
+
+/** Convert a total run time + distance to speed in m/min */
+export function timeDistanceToMetersPerMin(
+  totalMinutes: number,
+  totalSeconds: number,
+  distance: number,
+  unit: DistanceUnit,
+): number {
+  const secs = totalMinutes * 60 + totalSeconds;
+  if (secs <= 0 || distance <= 0) return 0;
+  const distanceMeters = unit === "km" ? distance * 1000 : distance * MI_TO_KM * 1000;
+  return (distanceMeters / secs) * 60;
 }
 
 /** Daniels-Gilbert oxygen cost at a given running speed (m/min) */
@@ -57,7 +73,8 @@ export function fitnessLabel(vo2max: number): string {
 export function estimateVO2max(input: VO2maxInput): VO2maxResult {
   const { paceMinutes, paceSeconds, paceUnit, avgHR, maxHR, restHR } = input;
 
-  const speedMPerMin = paceToMetersPerMin(paceMinutes, paceSeconds, paceUnit);
+  const speedMPerMin =
+    input.speedMPerMin ?? paceToMetersPerMin(paceMinutes, paceSeconds, paceUnit);
   const vo2AtSpeed = vo2AtPace(speedMPerMin);
   const percentVO2max = hrrFraction(avgHR, maxHR, restHR);
 
