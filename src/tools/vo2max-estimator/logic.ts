@@ -26,9 +26,9 @@ export function paceToMetersPerMin(
 ): number {
   const totalSeconds = minutes * 60 + seconds;
   if (totalSeconds <= 0) return 0;
-  // pace in seconds per meter
   const distanceMeters = unit === "min/km" ? 1000 : MI_TO_KM * 1000;
-  return distanceMeters / totalSeconds;
+  // convert distance/seconds → distance/minute
+  return (distanceMeters / totalSeconds) * 60;
 }
 
 /** Daniels-Gilbert oxygen cost at a given running speed (m/min) */

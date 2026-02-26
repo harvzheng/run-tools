@@ -70,10 +70,10 @@ describe("estimateVO2max", () => {
 
     // percentVO2max ≈ 71.4%
     // vo2AtPace(200) ≈ 36.01
-    // vo2max ≈ 36.01 / 0.714 ≈ 50.4
+    // vo2max ≈ 36.01 / 0.714 ≈ 50.4 → "Advanced" (50–59)
     expect(result.vo2max).toBeGreaterThan(45);
     expect(result.vo2max).toBeLessThan(60);
-    expect(result.fitnessLabel).toBe("Intermediate");
+    expect(result.fitnessLabel).toBe("Advanced");
     expect(result.percentVO2max).toBeCloseTo(71.4, 0);
     expect(result.warning).toBeNull();
   });
