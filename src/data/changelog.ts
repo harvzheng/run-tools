@@ -7,6 +7,18 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-02-26",
+    version: "0.0.4",
+    title: "Four new tools",
+    changes: [
+      "Added Weather gear — clothing recommendations based on temperature and run intensity",
+      "Added Race time predictor — project finish times from a recent race result",
+      "Added Split calculator — plan even, negative, or positive race splits",
+      "Added Treadmill pace converter — convert treadmill speed and incline to outdoor pace",
+      "Fixed: tools shown in Recent no longer repeat in All tools",
+    ],
+  },
+  {
     date: "2026-02-18",
     version: "0.0.3",
     title: "Pace converter enhancements",
