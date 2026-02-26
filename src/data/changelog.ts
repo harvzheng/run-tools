@@ -8,14 +8,51 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     date: "2026-02-26",
-    version: "0.0.4",
-    title: "Four new tools",
+    version: "0.0.8",
+    title: "Home page deduplication",
     changes: [
-      "Added Weather gear — clothing recommendations based on temperature and run intensity",
-      "Added Race time predictor — project finish times from a recent race result",
+      "Tools shown in Recent no longer repeat in the All tools section",
+    ],
+  },
+  {
+    date: "2026-02-24",
+    version: "0.0.7",
+    title: "Recently used tools",
+    changes: [
+      "Home page now surfaces your 2 most recently visited tools in a Recent section",
+    ],
+  },
+  {
+    date: "2026-02-22",
+    version: "0.0.6",
+    title: "Weather gear improvements",
+    changes: [
+      "More specific layering recommendations — base, mid, and outer layer callouts",
+      "Snow and blizzard condition alerts with appropriate gear advice",
+      "Improved footwear suggestions based on conditions",
+      "Sentence-case labels and consistent equal-height cards",
+    ],
+  },
+  {
+    date: "2026-02-19",
+    version: "0.0.5",
+    title: "New tools, SEO, and analytics",
+    changes: [
+      "Added Race time predictor — project finish times using the Riegel formula",
       "Added Split calculator — plan even, negative, or positive race splits",
-      "Added Treadmill pace converter — convert treadmill speed and incline to outdoor pace",
-      "Fixed: tools shown in Recent no longer repeat in All tools",
+      "Added Treadmill pace converter — convert treadmill speed and incline to equivalent outdoor pace",
+      "Added per-tool metadata, Open Graph tags, and JSON-LD schema for search engine rich results",
+      "Added robots.txt and auto-updating sitemap.xml",
+      "Added Vercel Web Analytics",
+    ],
+  },
+  {
+    date: "2026-02-18",
+    version: "0.0.4",
+    title: "Weather gear tool",
+    changes: [
+      "Added Weather gear — clothing recommendations based on temperature, wind, and run intensity",
+      "City weather search is now a submittable form with geolocation as a secondary option",
     ],
   },
   {
