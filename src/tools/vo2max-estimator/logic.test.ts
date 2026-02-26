@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   paceToMetersPerMin,
+  timeDistanceToMetersPerMin,
   vo2AtPace,
   hrrFraction,
   fitnessLabel,
@@ -20,6 +21,23 @@ describe("paceToMetersPerMin", () => {
 
   it("returns 0 for zero pace", () => {
     expect(paceToMetersPerMin(0, 0, "min/km")).toBe(0);
+  });
+});
+
+describe("timeDistanceToMetersPerMin", () => {
+  it("converts 20 min 5k correctly", () => {
+    // 5000m / (20*60)s * 60 = 250 m/min
+    expect(timeDistanceToMetersPerMin(20, 0, 5, "km")).toBeCloseTo(250, 1);
+  });
+
+  it("converts miles correctly", () => {
+    // 1 mi = 1609.34m, 8:00 mi = 480s → 1609.34/480*60 ≈ 201.17 m/min
+    expect(timeDistanceToMetersPerMin(8, 0, 1, "mi")).toBeCloseTo(201.17, 0);
+  });
+
+  it("returns 0 for zero time or distance", () => {
+    expect(timeDistanceToMetersPerMin(0, 0, 5, "km")).toBe(0);
+    expect(timeDistanceToMetersPerMin(20, 0, 0, "km")).toBe(0);
   });
 });
 
@@ -125,5 +143,26 @@ describe("estimateVO2max", () => {
       restHR: 50,
     });
     expect(result.warning).toBeNull();
+  });
+
+  it("produces the same result when speedMPerMin matches pace", () => {
+    const viaPace = estimateVO2max({
+      paceMinutes: 5,
+      paceSeconds: 0,
+      paceUnit: "min/km",
+      avgHR: 150,
+      maxHR: 190,
+      restHR: 50,
+    });
+    const viaSpeed = estimateVO2max({
+      paceMinutes: 0,
+      paceSeconds: 0,
+      paceUnit: "min/km",
+      speedMPerMin: 200, // 5:00/km = 200 m/min
+      avgHR: 150,
+      maxHR: 190,
+      restHR: 50,
+    });
+    expect(viaSpeed.vo2max).toBeCloseTo(viaPace.vo2max, 1);
   });
 });

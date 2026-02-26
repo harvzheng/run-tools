@@ -8,6 +8,14 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     date: "2026-02-26",
+    version: "0.1.0",
+    title: "VO2max estimator: time + distance input",
+    changes: [
+      "VO2max estimator now supports entering a total run time and distance (e.g. 20 min 5k) as an alternative to entering pace directly — includes quick-pick buttons for 5k, 10k, half marathon, and marathon",
+    ],
+  },
+  {
+    date: "2026-02-26",
     version: "0.0.9",
     title: "VO2max estimator",
     changes: [
