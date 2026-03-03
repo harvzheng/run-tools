@@ -14,6 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "build:mobile": "STATIC_EXPORT=true next build && npx cap sync",
+    "ios:prep": "bash scripts/ios-prep.sh",
     "ios:add": "npx cap add ios",
     "ios:open": "npx cap open ios",
     "ios:sync": "npm run build:mobile"
