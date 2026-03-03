@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-03-03",
+    version: "0.1.1",
+    title: "iOS / TestFlight prep",
+    changes: [
+      "Added @capacitor/ios package — enables generating the Xcode project with `npm run ios:add`",
+      "Added ios:add, ios:open, and ios:sync npm scripts for iOS build workflow",
+      "Updated capacitor.config.ts with iOS-specific settings (mobile viewport, domain limits)",
+      "Switched build:mobile from cap copy to cap sync so native plugin changes stay in sync",
+    ],
+  },
+  {
     date: "2026-02-26",
     version: "0.1.0",
     title: "VO2max estimator: time + distance input",
