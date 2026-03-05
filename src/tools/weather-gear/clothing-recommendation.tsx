@@ -7,6 +7,7 @@ import {
   Droplets,
   Sun,
   CloudRain,
+  CloudSnow,
   Snowflake,
   Flame,
   ChevronUp,
@@ -52,6 +53,10 @@ const ALERT_STYLES: Record<
   rain: {
     icon: CloudRain,
     bg: "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300",
+  },
+  snow: {
+    icon: CloudSnow,
+    bg: "bg-cyan-50 border-cyan-200 text-cyan-800 dark:bg-cyan-900/20 dark:border-cyan-800 dark:text-cyan-300",
   },
   cold: {
     icon: Snowflake,
