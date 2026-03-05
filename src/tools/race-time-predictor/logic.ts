@@ -1,26 +1,9 @@
-import { formatTime } from "@/lib/utils";
+import { KM_PER_MILE, RACE_DISTANCES } from "@/lib/constants";
+import { formatTime, timeToSeconds } from "@/lib/utils";
 
-export const KM_PER_MILE = 1.609344;
-
-export const RACE_DISTANCES_KM: { name: string; distanceKm: number }[] = [
-  { name: "5K", distanceKm: 5 },
-  { name: "10K", distanceKm: 10 },
-  { name: "Half Marathon", distanceKm: 21.0975 },
-  { name: "Marathon", distanceKm: 42.195 },
-];
+export { KM_PER_MILE, RACE_DISTANCES, timeToSeconds };
 
 export const DEFAULT_RIEGEL_EXPONENT = 1.06;
-
-export function timeToSeconds(time: string): number {
-  const parts = time.trim().split(":");
-  if (parts.length === 3) {
-    return Number(parts[0]) * 3600 + Number(parts[1]) * 60 + Number(parts[2]);
-  }
-  if (parts.length === 2) {
-    return Number(parts[0]) * 60 + Number(parts[1]);
-  }
-  return Number(time);
-}
 
 export function predictTime(
   baseSeconds: number,

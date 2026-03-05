@@ -5,6 +5,7 @@ export const config: ToolConfig = {
   name: "VO2max estimator",
   description: "Estimate your aerobic fitness from any training run using pace and heart rate",
   icon: "Activity",
+  accent: "from-violet-500 to-violet-600",
   tags: ["training", "heart rate", "fitness"],
   defaultInputs: {
     inputMode: "pace",

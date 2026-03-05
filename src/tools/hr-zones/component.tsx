@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import { useToolState } from "@/hooks/use-tool-state";
 import { NumberInput } from "@/components/number-input";
+import { SegmentedControl } from "@/components/segmented-control";
 import { ZoneBar } from "@/components/zone-bar";
 import {
   calculateMaxHR,
@@ -10,7 +11,7 @@ import {
   formatZonesAsText,
   type HRMethod,
 } from "./logic";
-import { config } from "./config";
+import { config, type HRZonesState } from "./config";
 import { Copy, Check } from "lucide-react";
 import { useState, useCallback } from "react";
 
@@ -20,18 +21,10 @@ const METHOD_OPTIONS: { value: HRMethod; label: string }[] = [
   { value: "lthr", label: "LTHR" },
 ];
 
-interface HRZonesState {
-  age: number;
-  restingHR: number;
-  maxHR: number;
-  lthr: number;
-  method: string;
-}
-
 function HRZonesInner() {
   const [state, update] = useToolState<HRZonesState>(
     config.slug,
-    config.defaultInputs as HRZonesState,
+    config.defaultInputs,
   );
   const [copied, setCopied] = useState(false);
 
@@ -57,22 +50,11 @@ function HRZonesInner() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Method selector */}
-      <div className="flex gap-1 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800/50">
-        {METHOD_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => update({ method: opt.value })}
-            className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-              method === opt.value
-                ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-neutral-100"
-                : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
-            }`}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
+      <SegmentedControl
+        value={method}
+        onChange={(value) => update({ method: value })}
+        options={METHOD_OPTIONS}
+      />
 
       {/* Inputs */}
       <div className="grid gap-4 sm:grid-cols-2">

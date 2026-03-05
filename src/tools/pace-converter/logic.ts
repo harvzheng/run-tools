@@ -1,14 +1,8 @@
 import type { PaceUnit, RaceTimes } from "@/lib/types";
-import { formatTime, formatPace } from "@/lib/utils";
+import { KM_PER_MILE, RACE_DISTANCES } from "@/lib/constants";
+import { formatTime, formatPace, timeToSeconds } from "@/lib/utils";
 
-export const KM_PER_MILE = 1.609344;
-
-export const RACE_DISTANCES_KM: Record<string, number> = {
-  "5K": 5,
-  "10K": 10,
-  "Half Marathon": 21.0975,
-  Marathon: 42.195,
-};
+export { KM_PER_MILE, RACE_DISTANCES };
 
 /**
  * Parse a pace string like "8:30" into total seconds.
@@ -76,9 +70,8 @@ function fromSecondsPerKm(secPerKm: number, unit: PaceUnit): number {
  */
 export function calculateRaceTimes(secPerKm: number): RaceTimes {
   const result: Record<string, string> = {};
-  for (const [race, distKm] of Object.entries(RACE_DISTANCES_KM)) {
-    const totalSeconds = secPerKm * distKm;
-    result[race] = formatTime(totalSeconds);
+  for (const { name, distanceKm } of RACE_DISTANCES) {
+    result[name] = formatTime(secPerKm * distanceKm);
   }
   return result as unknown as RaceTimes;
 }
@@ -105,19 +98,7 @@ export function formatValue(value: number, unit: PaceUnit): string {
   return value.toFixed(1);
 }
 
-/**
- * Parse a time string like "1:45:29" or "25:00" into total seconds.
- */
-export function timeToSeconds(time: string): number {
-  const parts = time.trim().split(":");
-  if (parts.length === 3) {
-    return Number(parts[0]) * 3600 + Number(parts[1]) * 60 + Number(parts[2]);
-  }
-  if (parts.length === 2) {
-    return Number(parts[0]) * 60 + Number(parts[1]);
-  }
-  return Number(time);
-}
+export { timeToSeconds };
 
 /**
  * Derive seconds-per-km from a finish time and distance in km.

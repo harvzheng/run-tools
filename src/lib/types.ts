@@ -1,11 +1,12 @@
-export interface ToolConfig {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ToolConfig<T extends Record<string, any> = Record<string, any>> {
   slug: string;
   name: string;
   description: string;
   icon: string;
+  accent: string;
   tags: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  defaultInputs: Record<string, any>;
+  defaultInputs: T;
 }
 
 export interface Zone {

@@ -1,4 +1,5 @@
 import type { ToolConfig } from "@/lib/types";
+import dynamic from "next/dynamic";
 import { config as hrZones } from "./hr-zones/config";
 import { config as paceConverter } from "./pace-converter/config";
 import { config as weatherGear } from "./weather-gear/config";
@@ -16,6 +17,22 @@ export const tools: ToolConfig[] = [
   treadmillPace,
   vo2maxEstimator,
 ];
+
+export const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
+  "hr-zones": dynamic(() => import("@/tools/hr-zones/component")),
+  "pace-converter": dynamic(() => import("@/tools/pace-converter/component")),
+  "weather-gear": dynamic(() => import("@/tools/weather-gear/component")),
+  "race-time-predictor": dynamic(
+    () => import("@/tools/race-time-predictor/component"),
+  ),
+  "split-calculator": dynamic(
+    () => import("@/tools/split-calculator/component"),
+  ),
+  "treadmill-pace": dynamic(() => import("@/tools/treadmill-pace/component")),
+  "vo2max-estimator": dynamic(
+    () => import("@/tools/vo2max-estimator/component"),
+  ),
+};
 
 export function getToolBySlug(slug: string): ToolConfig | undefined {
   return tools.find((t) => t.slug === slug);

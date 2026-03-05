@@ -1,25 +1,8 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
-import { getToolBySlug, tools } from "@/tools/registry";
+import { getToolBySlug, tools, toolComponents } from "@/tools/registry";
 import { notFound } from "next/navigation";
 import { ToolShell } from "@/components/tool-shell";
 import { RecordVisit } from "@/components/record-visit";
-
-const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
-  "hr-zones": dynamic(() => import("@/tools/hr-zones/component")),
-  "pace-converter": dynamic(() => import("@/tools/pace-converter/component")),
-  "weather-gear": dynamic(() => import("@/tools/weather-gear/component")),
-  "race-time-predictor": dynamic(
-    () => import("@/tools/race-time-predictor/component"),
-  ),
-  "split-calculator": dynamic(
-    () => import("@/tools/split-calculator/component"),
-  ),
-  "treadmill-pace": dynamic(() => import("@/tools/treadmill-pace/component")),
-  "vo2max-estimator": dynamic(
-    () => import("@/tools/vo2max-estimator/component"),
-  ),
-};
 
 export function generateStaticParams() {
   return tools.map((t) => ({ slug: t.slug }));

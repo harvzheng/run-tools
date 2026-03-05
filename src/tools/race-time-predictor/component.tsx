@@ -1,13 +1,15 @@
 "use client";
 
-import { Suspense, useCallback, useState } from "react";
+import { Suspense, useCallback } from "react";
 import { useToolState } from "@/hooks/use-tool-state";
 import { NumberInput } from "@/components/number-input";
+import { TimeInput } from "@/components/time-input";
+import { inputClass, selectClass } from "@/lib/styles";
 import { motion } from "framer-motion";
-import { config } from "./config";
+import { config, type RaceTimeState } from "./config";
 import {
   KM_PER_MILE,
-  RACE_DISTANCES_KM,
+  RACE_DISTANCES,
   DEFAULT_RIEGEL_EXPONENT,
   timeToSeconds,
   predictTime,
@@ -17,57 +19,10 @@ import { formatTime } from "@/lib/utils";
 
 type DistanceUnit = "km" | "mi";
 
-interface RaceTimeState {
-  baseTimeSeconds: number;
-  baseDistance: number;
-  baseDistanceUnit: string;
-  exponent: number;
-  targetDistance: number;
-  targetDistanceUnit: string;
-}
-
-const inputClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
-
-function TimeInput({
-  value,
-  onCommit,
-  id,
-}: {
-  value: string;
-  onCommit: (time: string) => void;
-  id?: string;
-}) {
-  const [editing, setEditing] = useState(false);
-  const [text, setText] = useState("");
-
-  return (
-    <input
-      id={id}
-      type="text"
-      inputMode="text"
-      value={editing ? text : value}
-      onFocus={() => {
-        setEditing(true);
-        setText(value);
-      }}
-      onBlur={(e) => {
-        onCommit(e.target.value);
-        setEditing(false);
-      }}
-      onChange={(e) => {
-        setText(e.target.value);
-        onCommit(e.target.value);
-      }}
-      className={inputClass}
-    />
-  );
-}
-
 function RaceTimePredictorInner() {
   const [state, update] = useToolState<RaceTimeState>(
     config.slug,
-    config.defaultInputs as RaceTimeState,
+    config.defaultInputs,
   );
 
   const baseDistanceUnit = (state.baseDistanceUnit ?? "km") as DistanceUnit;
@@ -97,7 +52,7 @@ function RaceTimePredictorInner() {
     [update],
   );
 
-  const standardPredictions = RACE_DISTANCES_KM.map((race) => ({
+  const standardPredictions = RACE_DISTANCES.map((race) => ({
     name: race.name,
     time: formatPrediction(
       predictTime(
@@ -157,7 +112,7 @@ function RaceTimePredictorInner() {
               onChange={(e) =>
                 update({ baseDistanceUnit: e.target.value as DistanceUnit })
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className={selectClass}
             >
               <option value="km">km</option>
               <option value="mi">mi</option>
@@ -198,7 +153,7 @@ function RaceTimePredictorInner() {
               onChange={(e) =>
                 update({ targetDistanceUnit: e.target.value as DistanceUnit })
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className={selectClass}
             >
               <option value="km">km</option>
               <option value="mi">mi</option>

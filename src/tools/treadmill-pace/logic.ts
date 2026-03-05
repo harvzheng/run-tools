@@ -1,6 +1,7 @@
+import { KM_PER_MILE } from "@/lib/constants";
 import { formatPace } from "@/lib/utils";
 
-export const KM_PER_MILE = 1.609344;
+export { KM_PER_MILE };
 
 export type SpeedUnit = "mph" | "km/h";
 
