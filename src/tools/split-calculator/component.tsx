@@ -1,10 +1,12 @@
 "use client";
 
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo } from "react";
 import { useToolState } from "@/hooks/use-tool-state";
-import { NumberInput } from "@/components/number-input";
+import { SegmentedControl } from "@/components/segmented-control";
+import { TimeInput } from "@/components/time-input";
+import { inputClass, selectClass } from "@/lib/styles";
 import { motion } from "framer-motion";
-import { config } from "./config";
+import { config, type SplitState } from "./config";
 import {
   KM_PER_MILE,
   calculateSplits,
@@ -17,62 +19,16 @@ import { formatTime } from "@/lib/utils";
 
 type DistanceUnit = "km" | "mi";
 
-interface SplitState {
-  distance: number;
-  distanceUnit: string;
-  totalTimeSeconds: number;
-  splitUnit: string;
-  strategy: string;
-}
-
 const STRATEGY_OPTIONS: { value: SplitStrategy; label: string }[] = [
   { value: "even", label: "Even" },
   { value: "negative", label: "Negative" },
   { value: "positive", label: "Positive" },
 ];
 
-const inputClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
-
-function TimeInput({
-  value,
-  onCommit,
-  id,
-}: {
-  value: string;
-  onCommit: (time: string) => void;
-  id?: string;
-}) {
-  const [editing, setEditing] = useState(false);
-  const [text, setText] = useState("");
-
-  return (
-    <input
-      id={id}
-      type="text"
-      inputMode="text"
-      value={editing ? text : value}
-      onFocus={() => {
-        setEditing(true);
-        setText(value);
-      }}
-      onBlur={(e) => {
-        onCommit(e.target.value);
-        setEditing(false);
-      }}
-      onChange={(e) => {
-        setText(e.target.value);
-        onCommit(e.target.value);
-      }}
-      className={inputClass}
-    />
-  );
-}
-
 function SplitCalculatorInner() {
   const [state, update] = useToolState<SplitState>(
     config.slug,
-    config.defaultInputs as SplitState,
+    config.defaultInputs,
   );
 
   const distanceUnit = (state.distanceUnit ?? "km") as DistanceUnit;
@@ -132,7 +88,7 @@ function SplitCalculatorInner() {
               onChange={(e) =>
                 update({ distanceUnit: e.target.value as DistanceUnit })
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className={selectClass}
             >
               <option value="km">km</option>
               <option value="mi">mi</option>
@@ -161,42 +117,25 @@ function SplitCalculatorInner() {
           >
             Split Length
           </label>
-          <div className="flex gap-1 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800/50">
-            {(["km", "mi"] as const).map((unit) => (
-              <button
-                key={unit}
-                onClick={() => update({ splitUnit: unit })}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-                  splitUnit === unit
-                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-neutral-100"
-                    : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
-                }`}
-              >
-                1 {unit}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            value={splitUnit}
+            onChange={(value) => update({ splitUnit: value })}
+            options={[
+              { value: "km", label: "1 km" },
+              { value: "mi", label: "1 mi" },
+            ]}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
             Strategy
           </label>
-          <div className="flex gap-1 rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800/50">
-            {STRATEGY_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => update({ strategy: opt.value })}
-                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-                  strategy === opt.value
-                    ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-neutral-100"
-                    : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            value={strategy}
+            onChange={(value) => update({ strategy: value })}
+            options={STRATEGY_OPTIONS}
+          />
         </div>
       </div>
 

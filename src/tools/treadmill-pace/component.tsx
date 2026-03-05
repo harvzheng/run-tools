@@ -3,23 +3,15 @@
 import { Suspense } from "react";
 import { useToolState } from "@/hooks/use-tool-state";
 import { NumberInput } from "@/components/number-input";
+import { inputClass, selectClass } from "@/lib/styles";
 import { motion } from "framer-motion";
-import { config } from "./config";
+import { config, type TreadmillState } from "./config";
 import { equivalentFlatSpeed, formatPaceValue, type SpeedUnit } from "./logic";
-
-interface TreadmillState {
-  speed: number;
-  speedUnit: string;
-  incline: number;
-}
-
-const inputClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
 
 function TreadmillPaceInner() {
   const [state, update] = useToolState<TreadmillState>(
     config.slug,
-    config.defaultInputs as TreadmillState,
+    config.defaultInputs,
   );
 
   const speedUnit = (state.speedUnit ?? "km/h") as SpeedUnit;
@@ -50,7 +42,7 @@ function TreadmillPaceInner() {
               onChange={(e) =>
                 update({ speedUnit: e.target.value as SpeedUnit })
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className={selectClass}
             >
               <option value="km/h">km/h</option>
               <option value="mph">mph</option>

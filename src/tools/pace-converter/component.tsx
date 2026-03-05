@@ -2,6 +2,8 @@
 
 import { Suspense, useCallback, useState } from "react";
 import { useToolState } from "@/hooks/use-tool-state";
+import { TimeInput } from "@/components/time-input";
+import { inputClass, selectClass } from "@/lib/styles";
 import {
   convertPace,
   formatValue,
@@ -11,19 +13,13 @@ import {
   timeToSeconds,
   paceFromTime,
   KM_PER_MILE,
-  RACE_DISTANCES_KM,
+  RACE_DISTANCES,
 } from "./logic";
-import { config } from "./config";
+import { config, type PaceState } from "./config";
 import type { PaceUnit } from "@/lib/types";
 import { motion } from "framer-motion";
 
 type DistanceUnit = "km" | "mi";
-
-interface PaceState {
-  paceMinKm: number;
-  customDistance: number;
-  customDistanceUnit: string;
-}
 
 const UNITS: { unit: PaceUnit; label: string }[] = [
   { unit: "min/km", label: "min/km" },
@@ -32,57 +28,12 @@ const UNITS: { unit: PaceUnit; label: string }[] = [
   { unit: "mph", label: "mph" },
 ];
 
-const RACE_NAMES = ["5K", "10K", "Half Marathon", "Marathon"] as const;
-
-const inputClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
-
-function TimeInput({
-  value,
-  onCommit,
-  id,
-  variant = "bordered",
-}: {
-  value: string;
-  onCommit: (time: string) => void;
-  id?: string;
-  variant?: "bordered" | "inline";
-}) {
-  const [editing, setEditing] = useState(false);
-  const [text, setText] = useState("");
-
-  const className =
-    variant === "inline"
-      ? "mt-1 h-auto w-full rounded-lg bg-transparent p-0 text-lg font-bold tabular-nums text-neutral-900 outline-none focus:ring-0 dark:text-neutral-100"
-      : inputClass;
-
-  return (
-    <input
-      id={id}
-      type="text"
-      inputMode="text"
-      value={editing ? text : value}
-      onFocus={() => {
-        setEditing(true);
-        setText(value);
-      }}
-      onBlur={(e) => {
-        onCommit(e.target.value);
-        setEditing(false);
-      }}
-      onChange={(e) => {
-        setText(e.target.value);
-        onCommit(e.target.value);
-      }}
-      className={className}
-    />
-  );
-}
+const RACE_NAMES = RACE_DISTANCES.map((r) => r.name);
 
 function PaceConverterInner() {
   const [state, update] = useToolState<PaceState>(
     config.slug,
-    config.defaultInputs as PaceState,
+    config.defaultInputs,
   );
   const [activeField, setActiveField] = useState<PaceUnit | null>(null);
   const [editingText, setEditingText] = useState("");
@@ -191,7 +142,7 @@ function PaceConverterInner() {
                   customDistanceUnit: e.target.value as DistanceUnit,
                 })
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className={selectClass}
             >
               <option value="km">km</option>
               <option value="mi">mi</option>
@@ -231,9 +182,12 @@ function PaceConverterInner() {
               <TimeInput
                 id={`race-${race}`}
                 variant="inline"
-                value={raceTimes[race]}
+                value={raceTimes[race as keyof typeof raceTimes]}
                 onCommit={(t) =>
-                  commitTimeForDistance(t, RACE_DISTANCES_KM[race])
+                  commitTimeForDistance(
+                    t,
+                    RACE_DISTANCES.find((r) => r.name === race)!.distanceKm,
+                  )
                 }
               />
             </motion.div>

@@ -1,6 +1,7 @@
-import { formatPace, formatTime } from "@/lib/utils";
+import { KM_PER_MILE } from "@/lib/constants";
+import { formatPace, formatTime, timeToSeconds } from "@/lib/utils";
 
-export const KM_PER_MILE = 1.609344;
+export { KM_PER_MILE, timeToSeconds };
 
 export type SplitStrategy = "even" | "negative" | "positive";
 
@@ -10,17 +11,6 @@ export interface SplitSegment {
   splitSeconds: number;
   cumulativeSeconds: number;
   paceSecondsPerKm: number;
-}
-
-export function timeToSeconds(time: string): number {
-  const parts = time.trim().split(":");
-  if (parts.length === 3) {
-    return Number(parts[0]) * 3600 + Number(parts[1]) * 60 + Number(parts[2]);
-  }
-  if (parts.length === 2) {
-    return Number(parts[0]) * 60 + Number(parts[1]);
-  }
-  return Number(time);
 }
 
 export function calculateSplits(
