@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-03-07",
+    version: "0.1.2",
+    title: "VO2max estimator distance field fix",
+    changes: [
+      "Fixed distance input in Time + Distance mode — clearing the field no longer snaps back to 0.1; empty is treated as 0",
+    ],
+  },
+  {
     date: "2026-03-03",
     version: "0.1.1",
     title: "iOS / TestFlight prep",

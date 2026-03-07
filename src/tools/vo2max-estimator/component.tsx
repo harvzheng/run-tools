@@ -208,11 +208,11 @@ function VO2maxEstimatorInner() {
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
-                    min={0.1}
+                    min={0}
                     step={0.1}
-                    value={state.tdDistance}
+                    value={state.tdDistance || ""}
                     onChange={(e) =>
-                      update({ tdDistance: Math.max(0.1, Number(e.target.value)) })
+                      update({ tdDistance: Number(e.target.value) || 0 })
                     }
                     className={inputClass}
                     aria-label="Distance"
