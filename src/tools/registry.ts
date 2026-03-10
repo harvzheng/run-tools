@@ -7,6 +7,7 @@ import { config as raceTimePredictor } from "./race-time-predictor/config";
 import { config as splitCalculator } from "./split-calculator/config";
 import { config as treadmillPace } from "./treadmill-pace/config";
 import { config as vo2maxEstimator } from "./vo2max-estimator/config";
+import { config as heatPace } from "./heat-pace/config";
 
 export const tools: ToolConfig[] = [
   hrZones,
@@ -16,6 +17,7 @@ export const tools: ToolConfig[] = [
   splitCalculator,
   treadmillPace,
   vo2maxEstimator,
+  heatPace,
 ];
 
 export const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
@@ -32,6 +34,7 @@ export const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
   "vo2max-estimator": dynamic(
     () => import("@/tools/vo2max-estimator/component"),
   ),
+  "heat-pace": dynamic(() => import("@/tools/heat-pace/component")),
 };
 
 export function getToolBySlug(slug: string): ToolConfig | undefined {
