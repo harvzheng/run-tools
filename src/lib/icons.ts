@@ -5,6 +5,7 @@ import {
   Gauge,
   Footprints,
   CloudSun,
+  Thermometer,
   type LucideIcon,
 } from "lucide-react";
 
@@ -15,4 +16,5 @@ export const iconMap: Record<string, LucideIcon> = {
   Gauge,
   Footprints,
   CloudSun,
+  Thermometer,
 };

@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-03-10",
+    version: "0.1.2",
+    title: "Heat pace converter",
+    changes: [
+      "Added Heat pace converter — adjust your target pace for hot weather with a quick-reference table across temperatures",
+    ],
+  },
+  {
     date: "2026-03-03",
     version: "0.1.1",
     title: "iOS / TestFlight prep",
