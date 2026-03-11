@@ -7,6 +7,14 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-03-11",
+    version: "0.1.3",
+    title: "Heat pace converter — humidity support",
+    changes: [
+      "Heat pace converter now includes dew point as an input, using the Temperature + Dew Point combined-value method from Mantzios et al. (2022) for more accurate heat adjustments in humid conditions",
+    ],
+  },
+  {
     date: "2026-03-10",
     version: "0.1.2",
     title: "Heat pace converter",
