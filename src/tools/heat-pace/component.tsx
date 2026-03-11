@@ -26,16 +26,6 @@ function parsePace(input: string): number {
   return Number(trimmed);
 }
 
-/** Dew point comfort labels (in °F). */
-function dewPointLabel(dpF: number): string {
-  if (dpF < 50) return "Dry";
-  if (dpF < 55) return "Comfortable";
-  if (dpF < 60) return "Noticeable";
-  if (dpF < 65) return "Humid";
-  if (dpF < 70) return "Very humid";
-  return "Oppressive";
-}
-
 const TEMP_PRESETS_F = [65, 70, 75, 80, 85, 90, 95];
 
 function HeatPaceInner() {
@@ -48,13 +38,7 @@ function HeatPaceInner() {
 
   const tempUnit = (state.tempUnit ?? "F") as TempUnit;
   const tempF = tempUnit === "C" ? cToF(state.temperature) : state.temperature;
-  const dewPointF =
-    tempUnit === "C" ? cToF(state.dewPoint ?? 18) : (state.dewPoint ?? 65);
-
-  // Clamp dew point to not exceed temperature
-  const clampedDewPointF = Math.min(dewPointF, tempF);
-
-  const result = adjustPaceForHeat(state.paceMinKm, tempF, clampedDewPointF);
+  const result = adjustPaceForHeat(state.paceMinKm, tempF);
 
   const commitPace = useCallback(
     (input: string) => {
@@ -122,19 +106,11 @@ function HeatPaceInner() {
               value={tempUnit}
               onChange={(e) => {
                 const newUnit = e.target.value as TempUnit;
-                const convertedTemp =
+                const converted =
                   newUnit === "C"
                     ? Math.round(fToC(state.temperature))
                     : Math.round(cToF(state.temperature));
-                const convertedDp =
-                  newUnit === "C"
-                    ? Math.round(fToC(state.dewPoint ?? 65))
-                    : Math.round(cToF(state.dewPoint ?? 18));
-                update({
-                  tempUnit: newUnit,
-                  temperature: convertedTemp,
-                  dewPoint: convertedDp,
-                });
+                update({ tempUnit: newUnit, temperature: converted });
               }}
               className={selectClass}
             >
@@ -142,28 +118,6 @@ function HeatPaceInner() {
               <option value="C">°C</option>
             </select>
           </div>
-        </div>
-
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="dew-point"
-            className="text-sm font-medium text-neutral-700 dark:text-neutral-300"
-          >
-            Dew point (°{tempUnit})
-            <span className="ml-2 font-normal text-neutral-400">
-              {dewPointLabel(clampedDewPointF)}
-            </span>
-          </label>
-          <input
-            id="dew-point"
-            type="number"
-            value={state.dewPoint ?? (tempUnit === "C" ? 18 : 65)}
-            onChange={(e) => update({ dewPoint: Number(e.target.value) })}
-            min={tempUnit === "C" ? -30 : -22}
-            max={state.temperature}
-            step={1}
-            className={inputClass}
-          />
         </div>
       </div>
 
@@ -176,8 +130,8 @@ function HeatPaceInner() {
       >
         <div className="text-sm font-medium text-orange-800 dark:text-orange-300">
           {result.slowdownPct > 0
-            ? `+${(result.slowdownPct * 100).toFixed(1)}% slower — combined T+DP: ${Math.round(tempF + clampedDewPointF)} °F`
-            : "No adjustment needed at these conditions"}
+            ? `+${(result.slowdownPct * 100).toFixed(1)}% slower in the heat`
+            : "No adjustment needed at this temperature"}
         </div>
       </motion.div>
 
@@ -224,18 +178,14 @@ function HeatPaceInner() {
         </div>
       </div>
 
-      {/* Quick reference table — varies temperature at current dew point */}
+      {/* Quick reference table */}
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
-          Quick reference{" "}
-          <span className="font-normal text-neutral-400">
-            at {tempUnit === "C" ? `${Math.round(fToC(clampedDewPointF))} °C` : `${Math.round(clampedDewPointF)} °F`} dew point
-          </span>
+          Quick reference
         </h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
           {TEMP_PRESETS_F.map((presetF, i) => {
-            const dp = Math.min(clampedDewPointF, presetF);
-            const pct = heatSlowdownPct(presetF, dp);
+            const pct = heatSlowdownPct(presetF);
             const displayTemp =
               tempUnit === "C"
                 ? `${Math.round(fToC(presetF))} °C`
@@ -266,7 +216,7 @@ function HeatPaceInner() {
                   {formatPaceValue(adjustedSec)}
                 </div>
                 <div className="text-xs text-neutral-400">
-                  {pct > 0 ? `+${(pct * 100).toFixed(1)}%` : "—"}
+                  +{(pct * 100).toFixed(1)}%
                 </div>
               </motion.div>
             );
