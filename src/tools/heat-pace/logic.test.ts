@@ -5,7 +5,7 @@ import {
   heatSlowdownPct,
   adjustPaceForHeat,
   formatPaceValue,
-  BASELINE_F,
+  BASELINE_COMBINED_F,
 } from "./logic";
 
 describe("cToF / fToC", () => {
@@ -23,53 +23,66 @@ describe("cToF / fToC", () => {
 });
 
 describe("heatSlowdownPct", () => {
-  it("returns 0 at or below baseline (60 °F)", () => {
-    expect(heatSlowdownPct(60)).toBe(0);
-    expect(heatSlowdownPct(50)).toBe(0);
-    expect(heatSlowdownPct(0)).toBe(0);
+  it("returns 0 when combined T+DP is at or below baseline (130 °F)", () => {
+    // 70 °F temp + 60 °F DP = 130 — exactly at baseline
+    expect(heatSlowdownPct(70, 60)).toBe(0);
+    // well below baseline
+    expect(heatSlowdownPct(60, 50)).toBe(0);
+    expect(heatSlowdownPct(50, 40)).toBe(0);
   });
 
-  it("returns positive slowdown above baseline", () => {
-    expect(heatSlowdownPct(65)).toBeGreaterThan(0);
-    expect(heatSlowdownPct(80)).toBeGreaterThan(0);
-    expect(heatSlowdownPct(95)).toBeGreaterThan(0);
+  it("returns positive slowdown when combined exceeds baseline", () => {
+    expect(heatSlowdownPct(75, 65)).toBeGreaterThan(0); // combined 140
+    expect(heatSlowdownPct(80, 70)).toBeGreaterThan(0); // combined 150
+    expect(heatSlowdownPct(90, 75)).toBeGreaterThan(0); // combined 165
   });
 
-  it("increases with temperature", () => {
-    const s70 = heatSlowdownPct(70);
-    const s80 = heatSlowdownPct(80);
-    const s90 = heatSlowdownPct(90);
-    expect(s80).toBeGreaterThan(s70);
-    expect(s90).toBeGreaterThan(s80);
+  it("increases as combined T+DP increases", () => {
+    const s1 = heatSlowdownPct(75, 65); // combined 140
+    const s2 = heatSlowdownPct(80, 70); // combined 150
+    const s3 = heatSlowdownPct(85, 75); // combined 160
+    expect(s2).toBeGreaterThan(s1);
+    expect(s3).toBeGreaterThan(s2);
   });
 
-  it("matches expected approximate values", () => {
-    // 70 °F → d=10 → 0.03 + 0.005 = 3.5%
-    expect(heatSlowdownPct(70)).toBeCloseTo(0.035, 2);
-    // 80 °F → d=20 → 0.06 + 0.02 = 8%
-    expect(heatSlowdownPct(80)).toBeCloseTo(0.08, 2);
-    // 90 °F → d=30 → 0.09 + 0.045 = 13.5%
-    expect(heatSlowdownPct(90)).toBeCloseTo(0.135, 2);
+  it("matches expected values from T+DP method (Mantzios 2022)", () => {
+    // combined 140 → d=10 → 0.002 × 10 = 2 %
+    expect(heatSlowdownPct(75, 65)).toBeCloseTo(0.02, 3);
+    // combined 150 → d=20 → 0.002 × 20 = 4 %
+    expect(heatSlowdownPct(80, 70)).toBeCloseTo(0.04, 3);
+    // combined 160 → d=30 → 0.002 × 30 = 6 %
+    expect(heatSlowdownPct(85, 75)).toBeCloseTo(0.06, 3);
+    // combined 170 → d=40 → 0.002 × 40 = 8 %
+    expect(heatSlowdownPct(90, 80)).toBeCloseTo(0.08, 3);
+  });
+
+  it("same combined value gives same slowdown regardless of split", () => {
+    // 80+70 = 150, same as 75+75 = 150
+    expect(heatSlowdownPct(80, 70)).toBeCloseTo(heatSlowdownPct(75, 75), 6);
+  });
+
+  it("BASELINE_COMBINED_F constant is 130", () => {
+    expect(BASELINE_COMBINED_F).toBe(130);
   });
 });
 
 describe("adjustPaceForHeat", () => {
   const basePace = 300; // 5:00/km
 
-  it("returns unchanged pace at baseline temp", () => {
-    const result = adjustPaceForHeat(basePace, BASELINE_F);
+  it("returns unchanged pace at baseline conditions", () => {
+    const result = adjustPaceForHeat(basePace, 70, 60); // combined 130
     expect(result.adjustedPaceSecPerKm).toBe(basePace);
     expect(result.slowdownPct).toBe(0);
   });
 
-  it("returns slower pace in heat", () => {
-    const result = adjustPaceForHeat(basePace, 85);
+  it("returns slower pace in hot and humid conditions", () => {
+    const result = adjustPaceForHeat(basePace, 85, 75); // combined 160 → 6%
     expect(result.adjustedPaceSecPerKm).toBeGreaterThan(basePace);
-    expect(result.slowdownPct).toBeGreaterThan(0);
+    expect(result.slowdownPct).toBeCloseTo(0.06, 3);
   });
 
   it("calculates mi pace as km pace × 1.609344", () => {
-    const result = adjustPaceForHeat(basePace, 80);
+    const result = adjustPaceForHeat(basePace, 80, 70);
     expect(result.adjustedPaceSecPerMi).toBeCloseTo(
       result.adjustedPaceSecPerKm * 1.609344,
       2,

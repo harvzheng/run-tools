@@ -4,6 +4,7 @@ export interface HeatPaceState {
   paceMinKm: number;
   temperature: number;
   tempUnit: string;
+  dewPoint: number; // in same unit as temperature
 }
 
 export const config: ToolConfig<HeatPaceState> = {
@@ -17,5 +18,6 @@ export const config: ToolConfig<HeatPaceState> = {
     paceMinKm: 300, // 5:00/km in seconds
     temperature: 80,
     tempUnit: "F",
+    dewPoint: 65, // 65 °F — warm summer day
   },
 };
