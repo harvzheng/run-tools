@@ -5,6 +5,8 @@ import { useToolState } from "@/hooks/use-tool-state";
 import { inputClass, selectClass, cardClass } from "@/lib/styles";
 import { motion } from "framer-motion";
 import { config, type HeatPaceState } from "./config";
+import { RecentChips } from "@/components/recent-chips";
+import { useRecentValues } from "@/hooks/use-recent-values";
 import {
   adjustPaceForHeat,
   cToF,
@@ -43,6 +45,7 @@ function HeatPaceInner() {
     config.slug,
     config.defaultInputs,
   );
+  const recentTemp = useRecentValues("heat-pace:temp");
   const [editingPace, setEditingPace] = useState(false);
   const [paceText, setPaceText] = useState("");
 
@@ -71,7 +74,7 @@ function HeatPaceInner() {
   return (
     <div className="flex flex-col gap-6">
       {/* Inputs */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="base-pace"
@@ -113,6 +116,7 @@ function HeatPaceInner() {
               type="number"
               value={state.temperature}
               onChange={(e) => update({ temperature: Number(e.target.value) })}
+              onBlur={() => recentTemp.record(state.temperature)}
               min={tempUnit === "C" ? -20 : -4}
               max={tempUnit === "C" ? 50 : 122}
               step={1}
@@ -142,6 +146,15 @@ function HeatPaceInner() {
               <option value="C">°C</option>
             </select>
           </div>
+        </div>
+
+        <div className="col-span-full">
+          <RecentChips
+            values={recentTemp.values}
+            currentValue={state.temperature}
+            onChange={(v) => update({ temperature: v })}
+            format={(v) => `${v}°${tempUnit}`}
+          />
         </div>
 
         <div className="flex flex-col gap-1.5">

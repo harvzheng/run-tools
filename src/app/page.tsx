@@ -3,9 +3,9 @@ import { AllTools } from "@/components/all-tools";
 
 export default function Home() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12">
-      <div className="mb-10">
-        <h1 className="text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 sm:text-4xl dark:text-neutral-100">
           Useful tools for runners
         </h1>
         <p className="mt-3 text-lg text-neutral-500">

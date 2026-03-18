@@ -94,7 +94,7 @@ export function LocationSearch({
               onFocus={() =>
                 geocodingResults.length > 0 && setShowDropdown(true)
               }
-              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3.5 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
+              className="focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-10 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3.5 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900"
             />
             {geocodingLoading && (
               <Loader2 className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin text-neutral-400" />

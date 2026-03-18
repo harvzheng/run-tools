@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Nav } from "@/components/nav";
+import { BottomNav } from "@/components/bottom-nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
@@ -38,9 +40,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
+      <body className="bg-white pt-[env(safe-area-inset-top)] text-neutral-900 antialiased md:pt-0 dark:bg-neutral-950 dark:text-neutral-100">
         <Nav />
-        <div className="min-h-[calc(100vh-3.5rem)]">{children}</div>
+        <div className="min-h-[calc(100vh-3.5rem)] pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-0">
+          {children}
+        </div>
+        <BottomNav />
         <Analytics />
       </body>
     </html>

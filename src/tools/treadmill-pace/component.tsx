@@ -5,6 +5,8 @@ import { useToolState } from "@/hooks/use-tool-state";
 import { NumberInput } from "@/components/number-input";
 import { inputClass, selectClass } from "@/lib/styles";
 import { motion } from "framer-motion";
+import { RecentChips } from "@/components/recent-chips";
+import { useRecentValues } from "@/hooks/use-recent-values";
 import { config, type TreadmillState } from "./config";
 import { equivalentFlatSpeed, formatPaceValue, type SpeedUnit } from "./logic";
 
@@ -14,12 +16,13 @@ function TreadmillPaceInner() {
     config.defaultInputs,
   );
 
+  const recentSpeed = useRecentValues("treadmill:speed");
   const speedUnit = (state.speedUnit ?? "km/h") as SpeedUnit;
   const result = equivalentFlatSpeed(state.speed, speedUnit, state.incline);
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="treadmill-speed"
@@ -35,6 +38,7 @@ function TreadmillPaceInner() {
               step={0.1}
               value={state.speed}
               onChange={(e) => update({ speed: Number(e.target.value) })}
+              onBlur={() => recentSpeed.record(state.speed)}
               className={inputClass}
             />
             <select
@@ -50,15 +54,23 @@ function TreadmillPaceInner() {
           </div>
         </div>
 
-        <NumberInput
-          label="Incline"
-          value={state.incline}
-          onChange={(incline) => update({ incline })}
-          min={-3}
-          max={15}
-          step={0.5}
-          unit="%"
-        />
+        <div className="flex flex-col gap-1.5">
+          <NumberInput
+            label="Incline"
+            value={state.incline}
+            onChange={(incline) => update({ incline })}
+            min={-3}
+            max={15}
+            step={0.5}
+            unit="%"
+          />
+          <RecentChips
+            values={recentSpeed.values}
+            currentValue={state.speed}
+            onChange={(v) => update({ speed: v })}
+            format={(v) => `${v} ${speedUnit}`}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
