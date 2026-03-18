@@ -12,6 +12,8 @@ import {
   type HRMethod,
 } from "./logic";
 import { config, type HRZonesState } from "./config";
+import { RecentChips } from "@/components/recent-chips";
+import { useRecentValues } from "@/hooks/use-recent-values";
 import { Copy, Check } from "lucide-react";
 import { useState, useCallback } from "react";
 
@@ -27,6 +29,7 @@ function HRZonesInner() {
     config.defaultInputs,
   );
   const [copied, setCopied] = useState(false);
+  const recentMaxHR = useRecentValues("hr-zones:maxHR");
 
   const method = state.method as HRMethod;
   const estimatedMax = calculateMaxHR(state.age);
@@ -57,7 +60,7 @@ function HRZonesInner() {
       />
 
       {/* Inputs */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <NumberInput
           label="Age"
           value={state.age}
@@ -71,14 +74,25 @@ function HRZonesInner() {
         />
 
         {method !== "lthr" && (
-          <NumberInput
-            label="Max Heart Rate"
-            value={effectiveMax}
-            onChange={(maxHR) => update({ maxHR })}
-            min={100}
-            max={230}
-            unit="bpm"
-          />
+          <div className="flex flex-col gap-1.5">
+            <NumberInput
+              label="Max Heart Rate"
+              value={effectiveMax}
+              onChange={(maxHR) => {
+                update({ maxHR });
+                recentMaxHR.record(maxHR);
+              }}
+              min={100}
+              max={230}
+              unit="bpm"
+            />
+            <RecentChips
+              values={recentMaxHR.values}
+              currentValue={effectiveMax}
+              onChange={(v) => update({ maxHR: v })}
+              format={(v) => `${v} bpm`}
+            />
+          </div>
         )}
 
         {method === "karvonen" && (

@@ -10,6 +10,9 @@ const config: CapacitorConfig = {
     // Restrict navigation to the app's own domain — required for some
     // App Store capabilities (e.g. StorageAccessAPI, App Clips)
     limitsNavigationsToAppBoundDomains: true,
+    // Enable edge-swipe back/forward navigation (runtime WKWebView setting)
+    // @ts-expect-error — recognised at runtime but missing from CapacitorConfig types
+    allowsBackForwardNavigationGestures: true,
   },
 };
 

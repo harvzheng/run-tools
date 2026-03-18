@@ -17,7 +17,7 @@ export function ToolShell({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="mx-auto flex max-w-3xl flex-col px-4 py-8"
+      className="mx-auto flex max-w-3xl flex-col px-4 py-5 sm:py-8"
     >
       <Link
         href="/"
@@ -27,7 +27,7 @@ export function ToolShell({
         Back to tools
       </Link>
 
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
           {tool.name}
         </h1>

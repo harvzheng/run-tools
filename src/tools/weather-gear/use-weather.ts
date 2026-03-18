@@ -8,6 +8,7 @@ import {
   type WeatherConditions,
   type GeocodingResult,
 } from "./logic";
+import { getCurrentPosition } from "@/lib/geolocation";
 
 interface LocationInfo {
   name: string;
@@ -58,30 +59,24 @@ export function useWeather(): UseWeatherReturn {
   );
 
   const detectLocation = useCallback(() => {
-    if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
-      return;
-    }
     setLoading(true);
     setError(null);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        fetchWeather(
-          pos.coords.latitude,
-          pos.coords.longitude,
-          "Current Location",
-        );
-      },
-      (err) => {
+    getCurrentPosition()
+      .then((pos) => {
+        fetchWeather(pos.latitude, pos.longitude, "Current Location");
+      })
+      .catch((err) => {
         setLoading(false);
-        if (err.code === err.PERMISSION_DENIED) {
-          setError("Location access denied. Search for a city or enter temperature manually.");
+        if (err?.code === 1 /* PERMISSION_DENIED */) {
+          setError(
+            "Location access denied. Search for a city or enter temperature manually.",
+          );
         } else {
-          setError("Could not detect location. Try searching for a city instead.");
+          setError(
+            "Could not detect location. Try searching for a city instead.",
+          );
         }
-      },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
-    );
+      });
   }, [fetchWeather]);
 
   const searchLocation = useCallback(async (query: string) => {
