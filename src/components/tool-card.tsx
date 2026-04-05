@@ -17,7 +17,7 @@ export function ToolCard({ tool, index }: { tool: ToolConfig; index: number }) {
     >
       <Link
         href={`/tools/${tool.slug}`}
-        className="group relative flex h-full flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5 transition-all hover:border-neutral-300 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700"
+        className="group relative flex h-full flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:shadow-neutral-900/50"
       >
         <div
           className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${tool.accent} text-white shadow-sm`}
@@ -28,7 +28,7 @@ export function ToolCard({ tool, index }: { tool: ToolConfig; index: number }) {
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             {tool.name}
           </h2>
-          <p className="mt-1 text-sm leading-relaxed text-neutral-500">
+          <p className="mt-1 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
             {tool.description}
           </p>
         </div>

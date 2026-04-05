@@ -7,6 +7,21 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-04-05",
+    version: "0.1.4",
+    title: "UX and design polish",
+    changes: [
+      "Added site footer with navigation links and GitHub link",
+      "Enhanced home page hero with gradient heading and tool count badges",
+      "Tool cards now lift on hover with improved shadow for a more tactile feel",
+      "Navigation bar shows a subtle shadow on scroll for better depth separation",
+      "Improved text contrast across the site for better readability",
+      "About page values now displayed in bordered cards",
+      "Back-to-tools link on tool pages is now a tappable chip with hover state",
+      "Changelog timeline dots now highlight the latest entry in brand color",
+    ],
+  },
+  {
     date: "2026-03-11",
     version: "0.1.3",
     title: "Heat pace converter — humidity support",

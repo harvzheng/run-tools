@@ -21,17 +21,19 @@ export function ToolShell({
     >
       <Link
         href="/"
-        className="mb-4 flex w-fit items-center gap-1.5 text-sm text-neutral-400 transition-colors hover:text-neutral-900 dark:hover:text-neutral-100"
+        className="mb-5 flex w-fit items-center gap-1.5 rounded-lg px-2 py-1 -ml-2 text-sm font-medium text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-neutral-100"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Back to tools
       </Link>
 
-      <div className="mb-6">
+      <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
           {tool.name}
         </h1>
-        <p className="mt-1 text-neutral-500">{tool.description}</p>
+        <p className="mt-1.5 text-neutral-600 dark:text-neutral-400">
+          {tool.description}
+        </p>
       </div>
 
       <div className="flex-1">{children}</div>

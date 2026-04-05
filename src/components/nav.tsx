@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Zap } from "lucide-react";
 
 const links = [
@@ -12,9 +13,23 @@ const links = [
 
 export function Nav() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 8);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <nav className="border-b border-neutral-200 bg-white/80 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-950/80">
+    <nav
+      className={`sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md transition-[border-color,box-shadow] duration-200 dark:bg-neutral-950/80 ${
+        scrolled
+          ? "border-neutral-200 shadow-sm dark:border-neutral-800"
+          : "border-transparent"
+      }`}
+    >
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white">

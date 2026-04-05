@@ -33,25 +33,28 @@ export default function AboutPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
         About RunTools
       </h1>
-      <p className="mt-4 max-w-xl text-lg leading-relaxed text-neutral-500">
+      <p className="mt-4 max-w-xl text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
         RunTools is a free collection of utilities for runners and coaches.
         Calculate heart rate zones, convert paces, and get quick answers without
         the overhead of a full training platform, all in one place.
       </p>
-      <p className="mt-4 max-w-xl text-lg leading-relaxed text-neutral-500">
+      <p className="mt-4 max-w-xl text-lg leading-relaxed text-neutral-600 dark:text-neutral-400">
         Mobile app under construction. Stay tuned!
       </p>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-3">
+      <div className="mt-12 grid gap-5 sm:grid-cols-3">
         {values.map(({ icon: Icon, title, description }) => (
-          <div key={title} className="flex flex-col gap-3">
-            <div className="bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 flex h-10 w-10 items-center justify-center rounded-xl">
+          <div
+            key={title}
+            className="flex flex-col gap-3 rounded-2xl border border-neutral-200 p-5 dark:border-neutral-800"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
               <Icon className="h-5 w-5" />
             </div>
             <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
               {title}
             </h2>
-            <p className="text-sm leading-relaxed text-neutral-500">
+            <p className="text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
               {description}
             </p>
           </div>
@@ -62,7 +65,7 @@ export default function AboutPage() {
         <h2 className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
           Open source
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-neutral-500">
+        <p className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
           RunTools is open source and built with Next.js, Tailwind CSS, and
           Framer Motion. Contributions, feature requests, and bug reports are
           welcome on{" "}

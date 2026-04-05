@@ -15,7 +15,7 @@ export function AllTools() {
 
   return (
     <section>
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+      <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
         All tools
       </h2>
       <div className="grid gap-4 sm:grid-cols-2">
