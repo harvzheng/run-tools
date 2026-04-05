@@ -40,7 +40,7 @@ export function NumberInput({
           min={min}
           max={max}
           step={step}
-          className="h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand-500 dark:focus:ring-brand-500/20"
+          className="h-10 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums outline-none transition-all focus:border-brand-400 focus:ring-2 focus:ring-brand-100 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:border-brand-500 dark:focus:ring-brand-500/20"
         />
         {unit && (
           <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-neutral-400">

@@ -74,7 +74,7 @@ function PaceConverterInner() {
   return (
     <div className="flex flex-col gap-6">
       {/* Pace/speed inputs */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         {UNITS.map(({ unit, label }) => {
           const computed = convertPace(secPerKm, "min/km", unit);
           const isEditing = activeField === unit;
