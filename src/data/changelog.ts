@@ -8,7 +8,7 @@ export interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     date: "2026-04-05",
-    version: "0.1.4",
+    version: "0.1.5",
     title: "UX and design polish",
     changes: [
       "Added site footer with navigation links and GitHub link",
@@ -19,6 +19,19 @@ export const changelog: ChangelogEntry[] = [
       "About page values now displayed in bordered cards",
       "Back-to-tools link on tool pages is now a tappable chip with hover state",
       "Changelog timeline dots now highlight the latest entry in brand color",
+    ],
+  },
+  {
+    date: "2026-03-18",
+    version: "0.1.4",
+    title: "Mobile UX improvements",
+    changes: [
+      "Added bottom tab navigation on mobile — Tools, Changelog, and About tabs with safe-area support",
+      "Tool cards now display in a compact 2-column grid on mobile with icon and name only",
+      "Weather gear geolocation now works in the native iOS app (Capacitor)",
+      "Swipe-from-left-edge navigates back on iOS",
+      "Recent value chips appear below key inputs after you use a tool, for quick re-entry",
+      "Tighter spacing and 2-column input grids for better information density on small screens",
     ],
   },
   {

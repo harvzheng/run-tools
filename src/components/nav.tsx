@@ -24,7 +24,7 @@ export function Nav() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 border-b bg-white/80 backdrop-blur-md transition-[border-color,box-shadow] duration-200 dark:bg-neutral-950/80 ${
+      className={`sticky top-0 z-50 hidden border-b bg-white/80 pt-[env(safe-area-inset-top)] backdrop-blur-md transition-[border-color,box-shadow] duration-200 md:block dark:bg-neutral-950/80 ${
         scrolled
           ? "border-neutral-200 shadow-sm dark:border-neutral-800"
           : "border-transparent"

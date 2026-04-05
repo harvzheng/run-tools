@@ -16,11 +16,11 @@ export function RecentTools() {
   if (recent.length === 0) return null;
 
   return (
-    <section className="mb-10">
+    <section className="mb-6 sm:mb-10">
       <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
         Recent
       </h2>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {recent.map((tool, i) => (
           <ToolCard key={tool.slug} tool={tool} index={i} />
         ))}

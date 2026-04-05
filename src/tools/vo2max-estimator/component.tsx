@@ -5,6 +5,8 @@ import { useToolState } from "@/hooks/use-tool-state";
 import { NumberInput } from "@/components/number-input";
 import { motion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
+import { RecentChips } from "@/components/recent-chips";
+import { useRecentValues } from "@/hooks/use-recent-values";
 import { config } from "./config";
 import {
   estimateVO2max,
@@ -30,10 +32,10 @@ interface VO2maxState {
 }
 
 const inputClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
+  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-10 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm tabular-nums transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
 
 const selectClass =
-  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
+  "focus:border-brand-400 focus:ring-brand-100 dark:focus:border-brand-500 dark:focus:ring-brand-500/20 h-10 rounded-xl border border-neutral-200 bg-white px-3 text-sm transition-all outline-none focus:ring-2 dark:border-neutral-700 dark:bg-neutral-900";
 
 const PACE_UNITS: { value: PaceUnit; label: string }[] = [
   { value: "min/km", label: "min/km" },
@@ -52,6 +54,9 @@ function VO2maxEstimatorInner() {
     config.slug,
     config.defaultInputs as VO2maxState,
   );
+
+  const recentMaxHR = useRecentValues("vo2max:maxHR");
+  const recentAvgHR = useRecentValues("vo2max:avgHR");
 
   const inputMode = (state.inputMode ?? "pace") as InputMode;
   const paceUnit = (state.paceUnit ?? "min/km") as PaceUnit;
@@ -115,7 +120,7 @@ function VO2maxEstimatorInner() {
       </div>
 
       {/* Inputs */}
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         {inputMode === "pace" ? (
           /* Pace input */
           <div className="flex flex-col gap-1.5">
@@ -165,7 +170,7 @@ function VO2maxEstimatorInner() {
         ) : (
           /* Time + Distance inputs */
           <div className="flex flex-col gap-3 sm:col-span-2">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-4">
               {/* Time */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
@@ -253,23 +258,45 @@ function VO2maxEstimatorInner() {
           </div>
         )}
 
-        <NumberInput
-          label="Average HR"
-          value={state.avgHR}
-          onChange={(avgHR) => update({ avgHR })}
-          min={80}
-          max={200}
-          unit="bpm"
-        />
+        <div className="flex flex-col gap-1.5">
+          <NumberInput
+            label="Average HR"
+            value={state.avgHR}
+            onChange={(avgHR) => {
+              update({ avgHR });
+              recentAvgHR.record(avgHR);
+            }}
+            min={80}
+            max={200}
+            unit="bpm"
+          />
+          <RecentChips
+            values={recentAvgHR.values}
+            currentValue={state.avgHR}
+            onChange={(v) => update({ avgHR: v })}
+            format={(v) => `${v} bpm`}
+          />
+        </div>
 
-        <NumberInput
-          label="Max HR"
-          value={state.maxHR}
-          onChange={(maxHR) => update({ maxHR })}
-          min={150}
-          max={220}
-          unit="bpm"
-        />
+        <div className="flex flex-col gap-1.5">
+          <NumberInput
+            label="Max HR"
+            value={state.maxHR}
+            onChange={(maxHR) => {
+              update({ maxHR });
+              recentMaxHR.record(maxHR);
+            }}
+            min={150}
+            max={220}
+            unit="bpm"
+          />
+          <RecentChips
+            values={recentMaxHR.values}
+            currentValue={state.maxHR}
+            onChange={(v) => update({ maxHR: v })}
+            format={(v) => `${v} bpm`}
+          />
+        </div>
 
         <NumberInput
           label="Resting HR"
