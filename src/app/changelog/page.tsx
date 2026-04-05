@@ -12,7 +12,7 @@ export default function ChangelogPage() {
       <h1 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
         Changelog
       </h1>
-      <p className="mt-2 text-neutral-500">
+      <p className="mt-2 text-neutral-600 dark:text-neutral-400">
         New features, improvements, and fixes.
       </p>
 
@@ -25,7 +25,13 @@ export default function ChangelogPage() {
             )}
 
             {/* Timeline dot */}
-            <div className="relative mt-1.5 h-[15px] w-[15px] shrink-0 rounded-full border-[3px] border-brand-500 bg-white dark:bg-neutral-950" />
+            <div
+              className={`relative mt-1.5 h-[15px] w-[15px] shrink-0 rounded-full border-[3px] bg-white dark:bg-neutral-950 ${
+                i === 0
+                  ? "border-brand-500"
+                  : "border-neutral-300 dark:border-neutral-600"
+              }`}
+            />
 
             <div className="flex-1">
               <div className="flex flex-wrap items-baseline gap-2">
