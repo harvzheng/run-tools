@@ -10,15 +10,17 @@ import { config as vo2maxEstimator } from "./vo2max-estimator/config";
 import { config as heatPace } from "./heat-pace/config";
 
 export const tools: ToolConfig[] = [
-  hrZones,
-  paceConverter,
   weatherGear,
+  hrZones,
+  heatPace,
+  paceConverter,
   raceTimePredictor,
+  vo2maxEstimator,
   splitCalculator,
   treadmillPace,
-  vo2maxEstimator,
-  heatPace,
 ];
+
+export const MORE_TOOLS_SLUGS = new Set(["split-calculator", "treadmill-pace"]);
 
 export const toolComponents: Record<string, ReturnType<typeof dynamic>> = {
   "hr-zones": dynamic(() => import("@/tools/hr-zones/component")),

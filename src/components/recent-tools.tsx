@@ -20,7 +20,7 @@ export function RecentTools() {
       <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
         Recent
       </h2>
-      <div className="grid grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {recent.map((tool, i) => (
           <ToolCard key={tool.slug} tool={tool} index={i} />
         ))}

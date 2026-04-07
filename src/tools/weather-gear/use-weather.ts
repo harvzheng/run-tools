@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   buildWeatherApiUrl,
   buildGeocodingUrl,
@@ -107,6 +107,32 @@ export function useWeather(): UseWeatherReturn {
     },
     [fetchWeather],
   );
+
+  // Auto-detect location via IP on first load (no permission needed)
+  useEffect(() => {
+    let cancelled = false;
+    async function autoDetect() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (
+          cancelled ||
+          typeof data.latitude !== "number" ||
+          typeof data.longitude !== "number"
+        )
+          return;
+        const name = [data.city, data.region].filter(Boolean).join(", ") || "Your area";
+        fetchWeather(data.latitude, data.longitude, name);
+      } catch {
+        // Silently fail — user can search or use geolocation manually
+      }
+    }
+    autoDetect();
+    return () => {
+      cancelled = true;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const refresh = useCallback(() => {
     if (location) {

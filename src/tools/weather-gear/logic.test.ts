@@ -151,21 +151,21 @@ describe("parseWeatherResponse", () => {
 });
 
 describe("calculateEffectiveTemperature", () => {
-  it("returns apparent temp with no adjustments on calm clear day", () => {
+  it("returns apparent temp with no adjustments on calm clear day (neutral)", () => {
     const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 5 });
-    expect(calculateEffectiveTemperature(weather, "easy")).toBe(50);
+    expect(calculateEffectiveTemperature(weather, "neutral")).toBe(50);
   });
 
   it("applies wind penalty above 15 mph", () => {
     const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 25 });
     // Wind excess = 10, penalty = (10/20)*10 = 5
-    expect(calculateEffectiveTemperature(weather, "easy")).toBe(45);
+    expect(calculateEffectiveTemperature(weather, "neutral")).toBe(45);
   });
 
   it("caps wind penalty at 10F", () => {
     const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 50 });
     // Wind excess capped at 20, penalty = 10
-    expect(calculateEffectiveTemperature(weather, "easy")).toBe(40);
+    expect(calculateEffectiveTemperature(weather, "neutral")).toBe(40);
   });
 
   it("applies rain penalty", () => {
@@ -174,34 +174,34 @@ describe("calculateEffectiveTemperature", () => {
       windSpeedMph: 5,
       precipitationMm: 2,
     });
-    expect(calculateEffectiveTemperature(weather, "easy")).toBe(43);
+    expect(calculateEffectiveTemperature(weather, "neutral")).toBe(43);
   });
 
-  it("applies moderate intensity bonus", () => {
+  it("applies 'runs cold' penalty (-5F)", () => {
+    const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 5 });
+    expect(calculateEffectiveTemperature(weather, "cold")).toBe(45);
+  });
+
+  it("applies 'runs hot' bonus (+10F)", () => {
     const weather = makeWeather({ apparentTemperatureF: 40, windSpeedMph: 5 });
-    expect(calculateEffectiveTemperature(weather, "moderate")).toBe(50);
+    expect(calculateEffectiveTemperature(weather, "hot")).toBe(50);
   });
 
-  it("applies hard intensity bonus", () => {
-    const weather = makeWeather({ apparentTemperatureF: 40, windSpeedMph: 5 });
-    expect(calculateEffectiveTemperature(weather, "hard")).toBe(55);
-  });
-
-  it("combines wind, rain, and intensity", () => {
+  it("combines wind, rain, and body temp", () => {
     const weather = makeWeather({
       apparentTemperatureF: 50,
       windSpeedMph: 25,
       rainMm: 1,
     });
-    // Base 50 - 5 (wind) - 7 (rain) + 10 (moderate) = 48
-    expect(calculateEffectiveTemperature(weather, "moderate")).toBe(48);
+    // Base 50 - 5 (wind) - 7 (rain) + 10 (hot) = 48
+    expect(calculateEffectiveTemperature(weather, "hot")).toBe(48);
   });
 });
 
 describe("getClothingRecommendation", () => {
   it("recommends light gear for warm weather", () => {
     const weather = makeWeather({ apparentTemperatureF: 70, windSpeedMph: 3 });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.effectiveTemperatureF).toBe(70);
     expect(rec.summary).toContain("light");
     const torso = rec.zones.find((z) => z.zone === "torso");
@@ -210,13 +210,11 @@ describe("getClothingRecommendation", () => {
 
   it("recommends heavy layers for cold weather", () => {
     const weather = makeWeather({ apparentTemperatureF: 10, windSpeedMph: 5 });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.effectiveTemperatureF).toBe(10);
     const torso = rec.zones.find((z) => z.zone === "torso");
-    // Should have at least 3 specific layer items
     expect(torso?.items.length).toBeGreaterThanOrEqual(3);
     expect(torso?.items.some((i) => i.toLowerCase().includes("base layer"))).toBe(true);
-    // Should have cold alert
     expect(rec.alerts.some((a) => a.type === "cold")).toBe(true);
   });
 
@@ -224,12 +222,11 @@ describe("getClothingRecommendation", () => {
     const weather = makeWeather({
       apparentTemperatureF: 25,
       windSpeedMph: 10,
-      weatherCode: 73, // Moderate snow
+      weatherCode: 73,
       precipitationMm: 2,
     });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.alerts.some((a) => a.type === "snow")).toBe(true);
-    // Should NOT generate a rain alert when snowing
     expect(rec.alerts.some((a) => a.type === "rain")).toBe(false);
   });
 
@@ -237,10 +234,10 @@ describe("getClothingRecommendation", () => {
     const weather = makeWeather({
       apparentTemperatureF: 15,
       windSpeedMph: 40,
-      weatherCode: 75, // Heavy snow
+      weatherCode: 75,
       precipitationMm: 5,
     });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     const snowAlert = rec.alerts.find((a) => a.type === "snow");
     expect(snowAlert).toBeDefined();
     expect(snowAlert?.message.toLowerCase()).toContain("blizzard");
@@ -248,7 +245,7 @@ describe("getClothingRecommendation", () => {
 
   it("generates wind alert for high winds", () => {
     const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 25 });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.alerts.some((a) => a.type === "wind")).toBe(true);
   });
 
@@ -259,13 +256,13 @@ describe("getClothingRecommendation", () => {
       weatherCode: 63,
       rainMm: 2,
     });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.alerts.some((a) => a.type === "rain")).toBe(true);
   });
 
   it("generates heat alert for hot weather", () => {
     const weather = makeWeather({ apparentTemperatureF: 90, windSpeedMph: 3 });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.alerts.some((a) => a.type === "heat")).toBe(true);
   });
 
@@ -275,21 +272,27 @@ describe("getClothingRecommendation", () => {
       apparentTemperatureF: 75,
       humidityPercent: 85,
     });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.alerts.some((a) => a.type === "humidity")).toBe(true);
   });
 
-  it("shifts recommendations lighter with hard intensity", () => {
+  it("shifts recommendations lighter for 'runs hot'", () => {
     const weather = makeWeather({ apparentTemperatureF: 40, windSpeedMph: 5 });
-    const easyRec = getClothingRecommendation(weather, "easy");
-    const hardRec = getClothingRecommendation(weather, "hard");
-    // Hard adds 15F so effective goes from 40 to 55, fewer layers
-    expect(hardRec.effectiveTemperatureF).toBeGreaterThan(easyRec.effectiveTemperatureF);
+    const neutralRec = getClothingRecommendation(weather, "neutral");
+    const hotRec = getClothingRecommendation(weather, "hot");
+    expect(hotRec.effectiveTemperatureF).toBeGreaterThan(neutralRec.effectiveTemperatureF);
+  });
+
+  it("shifts recommendations warmer for 'runs cold'", () => {
+    const weather = makeWeather({ apparentTemperatureF: 50, windSpeedMph: 5 });
+    const neutralRec = getClothingRecommendation(weather, "neutral");
+    const coldRec = getClothingRecommendation(weather, "cold");
+    expect(coldRec.effectiveTemperatureF).toBeLessThan(neutralRec.effectiveTemperatureF);
   });
 
   it("excludes empty zones (e.g. no hands in warm weather)", () => {
     const weather = makeWeather({ apparentTemperatureF: 65, windSpeedMph: 3 });
-    const rec = getClothingRecommendation(weather, "easy");
+    const rec = getClothingRecommendation(weather, "neutral");
     expect(rec.zones.find((z) => z.zone === "hands")).toBeUndefined();
   });
 });

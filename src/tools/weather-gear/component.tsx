@@ -12,15 +12,15 @@ import { ClothingRecommendation } from "./clothing-recommendation";
 import {
   getClothingRecommendation,
   weatherFromManualTemp,
-  type WorkoutIntensity,
+  type BodyTemp,
   type TemperatureUnit,
   type WindSpeedUnit,
 } from "./logic";
 
-const INTENSITY_OPTIONS: { value: WorkoutIntensity; label: string }[] = [
-  { value: "easy", label: "Easy" },
-  { value: "moderate", label: "Moderate" },
-  { value: "hard", label: "Hard" },
+const BODY_TEMP_OPTIONS: { value: BodyTemp; label: string }[] = [
+  { value: "cold", label: "Runs cold" },
+  { value: "neutral", label: "Neutral" },
+  { value: "hot", label: "Runs hot" },
 ];
 
 function WeatherGearInner() {
@@ -41,7 +41,7 @@ function WeatherGearInner() {
     refresh,
   } = useWeather();
 
-  const intensity = state.intensity as WorkoutIntensity;
+  const bodyTemp = (state.intensity as BodyTemp) || "neutral";
   const tempUnit = state.tempUnit as TemperatureUnit;
   const windUnit = state.windUnit as WindSpeedUnit;
 
@@ -50,7 +50,7 @@ function WeatherGearInner() {
     : weather;
 
   const recommendation = activeWeather
-    ? getClothingRecommendation(activeWeather, intensity)
+    ? getClothingRecommendation(activeWeather, bodyTemp)
     : null;
 
   return (
@@ -74,12 +74,12 @@ function WeatherGearInner() {
 
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-          Workout Intensity
+          Body temperature
         </label>
         <SegmentedControl
-          value={intensity}
+          value={bodyTemp}
           onChange={(value) => update({ intensity: value })}
-          options={INTENSITY_OPTIONS}
+          options={BODY_TEMP_OPTIONS}
         />
       </div>
 

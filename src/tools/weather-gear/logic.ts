@@ -3,6 +3,7 @@
 export type TemperatureUnit = "F" | "C";
 export type WindSpeedUnit = "mph" | "kmh";
 export type WorkoutIntensity = "easy" | "moderate" | "hard";
+export type BodyTemp = "cold" | "neutral" | "hot";
 
 export interface WeatherConditions {
   temperatureF: number;
@@ -167,7 +168,7 @@ export function parseWeatherResponse(
 
 export function calculateEffectiveTemperature(
   weather: WeatherConditions,
-  intensity: WorkoutIntensity,
+  bodyTemp: BodyTemp,
 ): number {
   let temp = weather.apparentTemperatureF;
 
@@ -182,11 +183,11 @@ export function calculateEffectiveTemperature(
     temp -= 7;
   }
 
-  // Intensity bonus (harder effort = more body heat)
-  if (intensity === "moderate") {
+  // Body temp preference: "runs hot" = feels warmer, dress lighter; "runs cold" = feels cooler, dress warmer
+  if (bodyTemp === "hot") {
     temp += 10;
-  } else if (intensity === "hard") {
-    temp += 15;
+  } else if (bodyTemp === "cold") {
+    temp -= 5;
   }
 
   return Math.round(temp);
@@ -390,9 +391,9 @@ const ZONE_LABELS: Record<ClothingZone["zone"], string> = {
 
 export function getClothingRecommendation(
   weather: WeatherConditions,
-  intensity: WorkoutIntensity,
+  bodyTemp: BodyTemp,
 ): Recommendation {
-  const effectiveF = calculateEffectiveTemperature(weather, intensity);
+  const effectiveF = calculateEffectiveTemperature(weather, bodyTemp);
   const bracket = getBracket(effectiveF);
   const alerts = buildAlerts(weather, effectiveF);
 
