@@ -17,10 +17,10 @@ export function ToolCard({ tool, index }: { tool: ToolConfig; index: number }) {
     >
       <Link
         href={`/tools/${tool.slug}`}
-        className="group relative flex h-full flex-col items-center gap-2 rounded-xl border border-neutral-200 bg-white p-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg sm:items-start sm:gap-4 sm:rounded-2xl sm:p-5 sm:text-left dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:shadow-neutral-900/50"
+        className="group relative flex h-full flex-col items-center gap-1.5 rounded-xl border border-neutral-200 bg-white p-2.5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg sm:items-start sm:gap-3 sm:rounded-2xl sm:p-4 sm:text-left dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:shadow-neutral-900/50"
       >
         <div
-          className={`flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br sm:h-11 sm:w-11 sm:rounded-xl ${tool.accent} text-white shadow-sm`}
+          className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br sm:h-10 sm:w-10 sm:rounded-xl ${tool.accent} text-white shadow-sm`}
         >
           <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
