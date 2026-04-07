@@ -30,6 +30,15 @@ const UNITS: { unit: PaceUnit; label: string }[] = [
 
 const RACE_NAMES = RACE_DISTANCES.map((r) => r.name);
 
+// Common pace chips in min/mi — converted to sec/km on click
+const PACE_CHIPS = [
+  { label: "7:00/mi", secPerMi: 420 },
+  { label: "8:00/mi", secPerMi: 480 },
+  { label: "9:00/mi", secPerMi: 540 },
+  { label: "10:00/mi", secPerMi: 600 },
+  { label: "11:00/mi", secPerMi: 660 },
+];
+
 function PaceConverterInner() {
   const [state, update] = useToolState<PaceState>(
     config.slug,
@@ -112,6 +121,27 @@ function PaceConverterInner() {
                 className={inputClass}
               />
             </div>
+          );
+        })}
+      </div>
+
+      {/* Quick pace chips */}
+      <div className="flex flex-wrap gap-1.5">
+        {PACE_CHIPS.map(({ label, secPerMi }) => {
+          const secPerKmValue = secPerMi / KM_PER_MILE;
+          const isActive = Math.abs(secPerKm - secPerKmValue) < 1;
+          return (
+            <button
+              key={label}
+              onClick={() => update({ paceMinKm: secPerKmValue })}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                isActive
+                  ? "border-brand-300 bg-brand-50 text-brand-700 dark:border-brand-700 dark:bg-brand-900/20 dark:text-brand-300"
+                  : "border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-700 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:text-neutral-300"
+              }`}
+            >
+              {label}
+            </button>
           );
         })}
       </div>

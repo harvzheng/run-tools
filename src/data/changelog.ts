@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-04-07",
+    version: "0.1.5",
+    title: "UX refinements & smart defaults",
+    changes: [
+      "Weather gear now auto-detects your location via IP on first load — no permission prompt needed",
+      "Replaced 'Workout Intensity' with 'Body temperature' preference (Runs cold / Neutral / Runs hot) for more intuitive gear recommendations",
+      "Reordered tools by popularity: Weather gear and HR zones now appear first",
+      "Split calculator and Treadmill pace converter moved behind a 'More tools' section to reduce clutter",
+      "Added quick-pick pace chips to Pace converter (7:00–11:00 /mi) for fast input",
+      "Tighter card spacing on home page so more tools are visible at once",
+    ],
+  },
+  {
     date: "2026-03-18",
     version: "0.1.4",
     title: "Mobile UX improvements",

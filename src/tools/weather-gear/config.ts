@@ -16,7 +16,7 @@ export const config: ToolConfig<WeatherGearState> = {
   accent: "from-sky-500 to-sky-600",
   tags: ["weather", "clothing", "gear"],
   defaultInputs: {
-    intensity: "easy",
+    intensity: "neutral",
     tempUnit: "F",
     windUnit: "mph",
     manualTemp: 55,
